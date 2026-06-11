@@ -65,6 +65,7 @@ if (password.length < 6) {
 
     res.status(500).json({
       message: "Internal Server Error!"
+      // message:error.message
     });
 
   }
@@ -96,7 +97,10 @@ export async function login(req, res) {
         message: "Invalid credentials"
       });
     }
-
+    console.log(
+  "Login User ID:",
+  user._id
+);
     const token =
       generateToken(user._id);
 

@@ -8,18 +8,14 @@ import {
   getTrips,
   getTripById,
   updateTrip,
-  deleteTrip
-
+  deleteTrip,
+  getTripMembers
 }
 from "../Controllers/trip.controller.js";
 
 const router = Router();
 
-router.post(
-  "/",
-  protect,
-  createTrip
-);
+router.post( "/",protect,createTrip);
 
 
 router.get(
@@ -41,5 +37,10 @@ router.delete(
   "/:id",
   protect,
   deleteTrip
+);
+router.get(
+  "/:tripId/members",
+  protect,
+  getTripMembers
 );
 export default router;

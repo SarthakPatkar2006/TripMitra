@@ -1,5 +1,5 @@
 import Trip from "../Models/Trip.js";
-
+import TripMember from "../Models/TripMember.js";
 export async function createTrip(req, res) {
   try {
 
@@ -46,6 +46,11 @@ if (new Date(startDate) > new Date(endDate)) {
       tripType,
       owner: req.user._id
     });
+    await TripMember.create({
+  tripId: trip._id,
+  userId: req.user._id,
+  role: "owner"
+});
 
     res.status(201).json({
       success: true,
@@ -198,6 +203,38 @@ export async function deleteTrip(req, res) {
     res.status(200).json({
       success: true,
       message: "Trip deleted successfully"
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal Server Error"
+    });
+
+  }
+}
+
+import User from "../Models/User.js";
+
+export async function getTripMembers(req, res) {
+  try {
+
+    const { tripId } = req.params;
+
+    const members =
+      await TripMember.find({
+        tripId
+      }).populate(
+        "userId",
+        "name email profileImage"
+      );
+
+    res.status(200).json({
+      success: true,
+      count: members.length,
+      members
     });
 
   } catch (error) {

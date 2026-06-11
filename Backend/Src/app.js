@@ -3,6 +3,7 @@ import cors from "cors";
 
 import authRoutes from "./routes/auth.routes.js";
 import tripRoutes from './routes/trip.routes.js';
+import invitationRoutes from "./routes/invitation.routes.js";
 
 const app = express();
 
@@ -19,4 +20,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use('/api/trips',tripRoutes);
+app.use("/api",invitationRoutes);
+app.use("/api/invitations",invitationRoutes);
 export default app;
