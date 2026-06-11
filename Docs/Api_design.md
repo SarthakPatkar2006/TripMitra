@@ -63,7 +63,7 @@ Authenticates a user and returns JWT token.
 
 ```json
 {
-  "email": "rohan@gmail.com",
+  "email": "sarthak@gmail.com",
   "password": "password123"
 }
 ```
@@ -76,8 +76,8 @@ Authenticates a user and returns JWT token.
   "token": "jwt_token",
   "user": {
     "_id": "123",
-    "name": "Rohan Patil",
-    "email": "rohan@gmail.com"
+    "name": "sarthak patkar",
+    "email": "sar@gmail.com"
   }
 }
 ```
@@ -99,7 +99,12 @@ Returns currently logged-in user details.
 ---
 
 # Trip Management Module
-
+#Trips API's:
+POST   /api/trips
+GET    /api/trips
+GET    /api/trips/:id
+PUT    /api/trips/:id
+DELETE /api/trips/:id
 ## Create Trip
 
 ### Endpoint
