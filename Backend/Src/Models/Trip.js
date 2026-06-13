@@ -47,8 +47,41 @@ const tripSchema=new mongoose.Schema(
             "planning","active","completed","cancelled"
         ],
         default:"planning"
-    }
+    },
+    travelStyle: {
+  type: String,
+  enum: [
+    "budget",
+    "balanced",
+    "luxury"
+  ],
+  default: "balanced"
+},
 
+transportPreference: {
+  type: String,
+  enum: [
+    "public",
+    "cab",
+    "rental"
+  ],
+  default: "public"
+},
+
+accommodationType: {
+  type: String,
+  enum: [
+    "hostel",
+    "hotel",
+    "resort"
+  ],
+  default: "hotel"
+},
+
+numberOfTravelers: {
+  type: Number,
+  default: 1
+}
     },
     {
         timestamps:true
