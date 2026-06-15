@@ -6,6 +6,10 @@ const tripSchema=new mongoose.Schema(
             required:true,
             trim:true
         },
+        origin: {
+    type: String,
+    required: [true, "Please provide a starting location"]
+  },
         destination:{
             type:String,
             required:true,

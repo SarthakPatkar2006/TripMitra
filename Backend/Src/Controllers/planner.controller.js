@@ -1,137 +1,128 @@
-import Trip from "../Models/Trip.js";
-import { generateOptimizedPlan } from "../Services/planner.service.js"; // Updated Import
-import Itinerary from "../Models/Itinerary.js";
-import Activity from "../Models/Activity.js";
+import axios from 'axios';
+import Trip from '../Models/Trip.js';
+import Itinerary from '../Models/Itinerary.js';
+import Activity from '../Models/Activity.js';
 
-export async function generatePlan(req, res) {
+export const getTripItinerary = async (req, res) => {
   try {
     const { id } = req.params;
-    const trip = await Trip.findById(id);
 
-    if (!trip) {
-      return res.status(404).json({
-        message: "Trip not found"
-      });
+    // 1. Check if itinerary already exists in MongoDB
+    let days = await Itinerary.find({ tripId: id }).sort({ dayNumber: 1 });
+    if (days.length > 0) {
+      const fullItinerary = await Promise.all(days.map(async (day) => {
+        const activities = await Activity.find({ itineraryId: day._id }).sort({ createdAt: 1 });
+        return { ...day.toObject(), activities };
+      }));
+      return res.status(200).json({ success: true, days: fullItinerary });
     }
 
+    // 2. Fetch the trip constraints
+    const trip = await Trip.findById(id);
+    if (!trip) return res.status(404).json({ message: "Trip not found" });
+
+    const API_KEY = process.env.GEOAPIFY_API_KEY;
+    if (!API_KEY) {
+      return res.status(500).json({ message: "Server missing Geoapify API Key in .env file" });
+    }
+
+    console.log(`[1/3] Fetching coordinates for ${trip.destination}...`);
+    
+    // 3. GEOAPIFY STEP A: Get the Latitude and Longitude of the Destination City
+    const geoResponse = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${trip.destination}&format=json&apiKey=${API_KEY}`);
+    if (geoResponse.data.results.length === 0) {
+      return res.status(400).json({ message: "Could not find that destination on the map." });
+    }
+    const cityLat = geoResponse.data.results[0].lat;
+    const cityLon = geoResponse.data.results[0].lon;
+
+    console.log(`[2/3] Fetching tourist attractions near ${cityLat}, ${cityLon}...`);
+
+    // 4. GEOAPIFY STEP B: Search for Tourism & Entertainment within a 10km radius (10000 meters)
+    const placesResponse = await axios.get(`https://api.geoapify.com/v2/places?categories=tourism,entertainment&filter=circle:${cityLon},${cityLat},10000&limit=25&apiKey=${API_KEY}`);
+    
+    // 5. Data Enrichment: Map Geoapify data to fit the Python Engine's strict "Attraction" model
+    const realAttractions = placesResponse.data.features
+      .filter(feature => feature.properties.name) // Only keep places that actually have a name
+      .map(feature => {
+        return {
+          name: feature.properties.name,
+          categories: feature.properties.categories || ["tourism"],
+          // We simulate prices, duration, and ratings since free APIs don't provide them
+          average_cost: Math.floor(Math.random() * 2000) + 200, // ₹200 to ₹2200
+          estimated_duration: Math.floor(Math.random() * 120) + 60, // 60 to 180 mins
+          rating: (Math.random() * 1.5 + 3.5).toFixed(1), // 3.5 to 5.0 rating
+          popularity_score: Math.floor(Math.random() * 40) + 60, // 60 to 100 score
+          latitude: feature.properties.lat,
+          longitude: feature.properties.lon
+        };
+      });
+
+    // Calculate constraints for Python
     const startDate = new Date(trip.startDate);
     const endDate = new Date(trip.endDate);
+    const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
     
-    const totalDays = Math.ceil(
-      (endDate - startDate) / (1000 * 60 * 60 * 24)
-    ) + 1;
+    let dailyTimeLimit = 480; // 8 hours default
+    if (trip.travelStyle === 'packed') dailyTimeLimit = 600; // 10 hours
+    if (trip.travelStyle === 'relaxed') dailyTimeLimit = 300; // 5 hours
 
-    // ======================
-    // DELETE OLD PLAN HERE
-    // ======================
-    const existingItineraries = await Itinerary.find({
-      tripId: trip._id
-    });
-
-    for (const itinerary of existingItineraries) {
-      await Activity.deleteMany({
-        itineraryId: itinerary._id
-      });
-    }
-
-    await Itinerary.deleteMany({
-      tripId: trip._id
-    });
-
-    // ======================
-    // GENERATE NEW PLAN
-    // ======================
-    
-    // Construct the payload for our Python engine
-    // Assuming budget/interests are either saved on the Trip model or passed in req.body
-    const tripData = {
-        destination: trip.destination,
-        totalDays: totalDays,
-        maxBudget: trip.budget || req.body.budget || 5000, 
-        interests: trip.interests || req.body.interests || [],
-        
-        // Ensure you have a starting point (hotel coordinates). 
-        // Fallback to city center coordinates if not provided.
-        hotelLatitude: trip.hotelLatitude || req.body.hotelLatitude || 0,
-        hotelLongitude: trip.hotelLongitude || req.body.hotelLongitude || 0
+    // 6. Construct the payload for the Python Mathematical Engine
+    const pythonPayload = {
+      preferences: {
+        max_budget: trip.budget,
+        interests: ["tourism", "entertainment", "nature", "history"] 
+      },
+      attractions: realAttractions,
+      start_latitude: cityLat,
+      start_longitude: cityLon,
+      total_days: totalDays,
+      daily_time_limit: dailyTimeLimit
     };
 
-    // Call the new Python-backed service (Don't forget the 'await'!)
-    const optimizedResponse = await generateOptimizedPlan(tripData);
+    console.log(`[3/3] Sending ${realAttractions.length} real locations to Python Engine...`);
     
-    // The Python engine returns { tripSummary: {}, days: [...] }
-    const planDays = optimizedResponse.days;
+    // 7. Hit the Python FastAPI server
+    const pythonResponse = await axios.post('http://localhost:8000/generate-plan', pythonPayload);
+    const pythonItinerary = pythonResponse.data.days; 
+    const finalItinerary = [];
 
-    // ======================
-    // SAVE NEW PLAN
-    // ======================
+    // 8. Save the Python mathematical results into Node.js MongoDB
+    for (const dayData of pythonItinerary) {
+      const currentDayDate = new Date(trip.startDate);
+      currentDayDate.setDate(currentDayDate.getDate() + (dayData.dayNumber - 1));
 
-    for (const day of planDays) {
-      const itinerary = await Itinerary.create({
+      const newDay = await Itinerary.create({
         tripId: trip._id,
-        dayNumber: day.dayNumber,
-        date: new Date(
-          startDate.getTime() + (day.dayNumber - 1) * 24 * 60 * 60 * 1000
-        )
+        dayNumber: dayData.dayNumber,
+        date: currentDayDate
       });
 
-      // NOTE: Our Python engine returns 'route' instead of 'activities'
-      for (const activityName of day.route) {
-        await Activity.create({
-          itineraryId: itinerary._id,
-          title: activityName
-        });
+      const dayActivities = [];
+      for (const placeName of dayData.route) {
+        const placeDetails = realAttractions.find(a => a.name === placeName);
+        
+        if (placeDetails) {
+          const newAct = await Activity.create({
+            itineraryId: newDay._id,
+            title: placeDetails.name,
+            location: `GPS: ${placeDetails.latitude.toFixed(4)}, ${placeDetails.longitude.toFixed(4)}`,
+            description: `Estimated ${placeDetails.estimated_duration} min visit. Categories: ${placeDetails.categories[0].replace(/\./g, ' > ')}.`,
+            costEstimate: placeDetails.average_cost
+          });
+          dayActivities.push(newAct);
+        }
       }
+
+      finalItinerary.push({ ...newDay.toObject(), activities: dayActivities });
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Optimized itinerary generated successfully!",
-      tripSummary: optimizedResponse.tripSummary,
-      plan: planDays
-    });
+    res.status(200).json({ success: true, days: finalItinerary });
 
   } catch (error) {
-    console.error("Generate Plan Error:", error);
-    res.status(500).json({
-      message: error.message || "Internal Server Error"
-    });
+    console.error("Planner Engine Error:", error.message);
+    res.status(500).json({ message: "Optimization Engine Failed. Make sure Python is running and the API key is correct." });
   }
-}
-
-export async function getTripItinerary(req, res) {
-  try {
-    const { id } = req.params;
-
-    const itineraries = await Itinerary.find({
-      tripId: id
-    }).sort({
-      dayNumber: 1
-    });
-
-    const result = [];
-
-    for (const itinerary of itineraries) {
-      const activities = await Activity.find({
-        itineraryId: itinerary._id
-      });
-
-      result.push({
-        dayNumber: itinerary.dayNumber,
-        date: itinerary.date,
-        activities
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      days: result
-    });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Internal Server Error"
-    });
-  }
-}
+};
+// Alias to support the route file importing generatePlan
+export const generatePlan = getTripItinerary;

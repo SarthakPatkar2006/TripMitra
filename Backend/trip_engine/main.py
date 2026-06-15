@@ -75,9 +75,12 @@ async def generate_plan(payload: EngineRequest):
         
     scored_results.sort(key=lambda x: x["score"], reverse=True)
     
-    # STEP B: Route Optimization (Greedy Algorithm)
+    # STEP B: Route Optimization (Greedy Algorithm with Budget Enforcement)
     unvisited = [item["data"] for item in scored_results]
     itinerary = []
+    
+    # NEW: Track the total cost across the entire trip
+    trip_total_cost = 0 
     
     for day in range(1, payload.total_days + 1):
         daily_route = []
@@ -89,21 +92,31 @@ async def generate_plan(payload: EngineRequest):
             closest_attr = None
             shortest_dist = float('inf')
             
+            # Find the closest unvisited attraction
             for attr in unvisited:
                 dist = calculate_distance(current_lat, current_lon, attr.latitude, attr.longitude)
                 if dist < shortest_dist:
                     shortest_dist = dist
                     closest_attr = attr
             
+            # BUDGET CHECK: Will adding this place break the bank?
+            if trip_total_cost + closest_attr.average_cost > payload.preferences.max_budget:
+                # If it's too expensive, remove it from options and search again!
+                unvisited.remove(closest_attr)
+                continue
+            
             # Estimate travel time (assuming city speed of ~25 km/h)
             travel_time_mins = (shortest_dist / 25.0) * 60
             total_leg_time = travel_time_mins + closest_attr.estimated_duration
             
+            # Time check: Will this take too long today?
             if time_spent_today + total_leg_time > payload.daily_time_limit:
                 break
                 
+            # If it passes time AND budget checks, add it to the trip!
             daily_route.append(closest_attr.name)
             time_spent_today += total_leg_time
+            trip_total_cost += closest_attr.average_cost  # Add to our running total
             
             current_lat = closest_attr.latitude
             current_lon = closest_attr.longitude
@@ -118,7 +131,8 @@ async def generate_plan(payload: EngineRequest):
     return {
         "tripSummary": {
             "totalDays": payload.total_days,
-            "attractionsCovered": sum([len(day["route"]) for day in itinerary])
+            "attractionsCovered": sum([len(day["route"]) for day in itinerary]),
+            "totalEstimatedCost": trip_total_cost
         },
         "days": itinerary
     }

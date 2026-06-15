@@ -1,40 +1,46 @@
 import mongoose from 'mongoose';
-const tripMemberSchema=new mongoose.Schema(
-    {
+
+const tripMemberSchema = new mongoose.Schema(
+  {
     tripId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trip",
       required: true
     },
-        userId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      default: null // Allowed to be null while the invite is pending!
     },
-     role: {
+    email: { 
+      type: String,
+      required: true,
+      trim: true
+    },
+    role: {
       type: String,
       enum: ["owner", "member"],
       default: "member"
     },
-     joinedAt: {
+    status: { 
+      type: String,
+      enum: ['pending', 'accepted', 'declined'],
+      default: 'pending'
+    },
+    joinedAt: {
       type: Date,
       default: Date.now
     }
-    },
-    {
-        timestamps:true
-    }
-);
-tripMemberSchema.index(
-    {
-         tripId: 1,
-    userId: 1
-    },
-    {
-    unique: true
+  },
+  {
+    timestamps: true
   }
 );
-export default mongoose.model(
-    "TripMember",
-    tripMemberSchema
+
+// Changed the index to track unique emails per trip, rather than userIds
+tripMemberSchema.index(
+  { tripId: 1, email: 1 },
+  { unique: true }
 );
+
+export default mongoose.model("TripMember", tripMemberSchema);

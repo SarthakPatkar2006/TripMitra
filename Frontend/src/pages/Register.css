@@ -1,0 +1,40 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* Same beautiful background as login */
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+}
+
+.register-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 420px;
+}
+
+.register-header { text-align: center; margin-bottom: 28px; }
+.register-header h2 { font-size: 24px; color: #1a1a1a; font-weight: 700; margin-bottom: 8px; }
+.register-header p { font-size: 14px; color: #666666; line-height: 1.4; }
+
+.register-form { display: flex; flex-direction: column; gap: 20px; }
+.register-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+.register-btn:hover { background-color: #1d4ed8; }
+/* Inheriting the rest of the styles (inputs, error banners) globally from your Login.css since class names match */
