@@ -1,0 +1,25 @@
+.map-container-wrapper {
+  height: 400px; /* Consistent height */
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background-color: #f3f4f6;
+}
+
+.map-placeholder {
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  color: #6b7280;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+}
+
+/* Ensure map markers pop nicely */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}

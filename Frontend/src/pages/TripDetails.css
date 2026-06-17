@@ -4,12 +4,12 @@
 }
 
 .details-header {
-  background: linear-gradient(rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.95)), 
-              url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background: linear-gradient(rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.95)),
+    url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
   background-size: cover;
   background-position: center;
   color: white;
-  padding: 20px 40px 60px 40px;
+  padding: 20px 40px 60px;
 }
 
 .details-nav {
@@ -20,9 +20,15 @@
   margin: 0 auto;
 }
 
-.details-nav h2 { font-weight: 700; margin: 0; }
-.back-link { color: #d1d5db; text-decoration: none; font-weight: 500; }
-.back-link:hover { color: white; }
+.back-link {
+  color: #d1d5db;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  color: white;
+}
 
 .trip-hero-content {
   max-width: 1200px;
@@ -44,6 +50,7 @@
 .trip-badges {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .badge {
@@ -52,7 +59,6 @@
   font-size: 13px;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -64,7 +70,6 @@
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .delete-trip-btn:hover {
@@ -73,9 +78,212 @@
   border-color: #dc2626;
 }
 
+.map-section,
+.analytics-section,
+.collaboration-section,
+.expense-section {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 20px;
+}
+
+.map-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.trip-message {
+  max-width: 1200px;
+  margin: 0 auto 18px;
+  padding: 12px 16px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.analytics-section {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.analytics-tile,
+.members-panel,
+.activities-feed,
+.day-tabs,
+.expense-panel {
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.analytics-tile {
+  padding: 18px;
+}
+
+.analytics-tile span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.analytics-tile strong {
+  color: #111827;
+  font-size: 24px;
+}
+
+.collaboration-section {
+  margin-bottom: 30px;
+}
+
+.members-panel,
+.expense-panel {
+  padding: 22px;
+}
+
+.members-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.members-header h2 {
+  margin: 0 0 4px;
+  color: #111827;
+  font-size: 20px;
+}
+
+.members-header p,
+.muted-text {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.invite-form,
+.expense-form {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.invite-form input,
+.expense-form input,
+.activity-form input,
+.activity-form textarea {
+  min-width: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 11px 12px;
+  font-size: 14px;
+}
+
+.invite-form input:focus,
+.expense-form input:focus,
+.activity-form input:focus,
+.activity-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.invite-form button,
+.expense-form button,
+.activity-form-actions button {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.invite-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.invite-status {
+  margin: 0 0 12px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.member-list {
+  display: grid;
+  gap: 10px;
+}
+
+.member-row,
+.expense-row,
+.settlement-row,
+.balance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.member-row strong,
+.expense-row strong {
+  display: block;
+  color: #111827;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.member-row span,
+.expense-row span,
+.settlement-row span {
+  display: block;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.member-status {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.member-status.accepted {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.member-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.member-status.declined {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .itinerary-container {
   max-width: 1200px;
-  margin: -30px auto 40px;
+  margin: 0 auto 40px;
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 30px;
@@ -83,12 +291,8 @@
 }
 
 .day-tabs {
-  background: white;
-  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
   height: fit-content;
-  border: 1px solid #f3f4f6;
 }
 
 .day-tabs h3 {
@@ -108,46 +312,71 @@
   border-radius: 8px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.2s;
   border-left: 4px solid transparent;
 }
 
-.tab-btn:hover { background: #f9fafb; }
+.tab-btn:hover {
+  background: #f9fafb;
+}
 
 .tab-btn.active {
   background: #eff6ff;
   border-left-color: #3b82f6;
 }
 
-.tab-title { font-weight: 600; color: #1f2937; font-size: 14px; }
-.tab-date { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.tab-title {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+}
+
+.tab-date {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
 
 .activities-feed {
-  background: white;
-  border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-  border: 1px solid #f3f4f6;
 }
 
 .feed-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 22px;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 16px;
 }
 
-.feed-header h2 { font-size: 20px; font-weight: 700; color: #111827; }
+.feed-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
 
-.add-activity-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 600;
+.activity-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 130px;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.activity-form textarea {
+  grid-column: 1 / -1;
+  min-height: 78px;
+  resize: vertical;
+}
+
+.activity-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+}
+
+.activity-form-actions button[type="button"] {
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .timeline {
@@ -192,11 +421,106 @@
   border: 1px solid #f3f4f6;
 }
 
-.activity-content h3 { font-size: 16px; color: #111827; margin-bottom: 4px; font-weight: 600; }
-.location { font-size: 13px; color: #3b82f6; font-weight: 500; margin-bottom: 8px; }
-.description { font-size: 13px; color: #4b5563; line-height: 1.5; }
+.activity-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
 
-.loading-screen, .error-screen {
+.activity-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.activity-actions button {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 6px;
+  padding: 6px 9px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.activity-content h3 {
+  font-size: 16px;
+  color: #111827;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.location {
+  font-size: 13px;
+  color: #3b82f6;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.description {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.activity-cost {
+  font-size: 12px;
+  color: #111827;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.expense-section {
+  margin-bottom: 44px;
+}
+
+.expense-form {
+  grid-template-columns: 1fr 160px 150px;
+  margin-bottom: 24px;
+}
+
+.expense-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.expense-grid h3 {
+  color: #111827;
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+
+.expense-row,
+.settlement-row,
+.balance-row {
+  margin-bottom: 10px;
+}
+
+.settlement-row {
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.settlement-row strong {
+  color: #2563eb;
+}
+
+.balance-heading {
+  margin-top: 22px !important;
+}
+
+.positive-balance {
+  color: #166534;
+}
+
+.negative-balance {
+  color: #991b1b;
+}
+
+.loading-screen,
+.error-screen {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -204,4 +528,265 @@
   font-size: 16px;
   color: #4b5563;
   font-weight: 500;
+}
+
+@media (max-width: 760px) {
+  .details-header {
+    padding: 18px 20px 46px;
+  }
+
+  .trip-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .analytics-section,
+  .expense-grid,
+  .itinerary-container {
+    grid-template-columns: 1fr;
+  }
+
+  .invite-form,
+  .expense-form,
+  .activity-form,
+  .member-row {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .invite-form button,
+  .expense-form button {
+    min-height: 42px;
+  }
+}
+/* ===========================
+   Sidebar Header
+=========================== */
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+.add-day-btn,
+.add-activity-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-day-btn:hover,
+.add-activity-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ===========================
+   Day Tabs
+=========================== */
+
+.tab-btn {
+  position: relative;
+}
+
+.delete-day-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  width: 24px;
+  height: 24px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #ef4444;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-day-btn:hover {
+  background: #dc2626;
+}
+
+/* ===========================
+   Notes
+=========================== */
+
+.day-notes {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ===========================
+   Activity Delete
+=========================== */
+
+.delete-activity-btn {
+  margin-top: 14px;
+
+  background: #ef4444;
+  color: white;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 8px 14px;
+
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.delete-activity-btn:hover {
+  background: #dc2626;
+}
+
+/* ===========================
+   Modal
+=========================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal-content {
+  width: 450px;
+  background: white;
+
+  border-radius: 18px;
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.modal-content h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 24px;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  padding: 12px 14px;
+  font-size: 14px;
+
+  font-family: inherit;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.12);
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ===========================
+   Modal Buttons
+=========================== */
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  flex: 1;
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.modal-actions button:first-child {
+  background: #2563eb;
+  color: white;
+}
+
+.modal-actions button:first-child:hover {
+  background: #1d4ed8;
+}
+
+.modal-actions button:last-child {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.modal-actions button:last-child:hover {
+  background: #d1d5db;
+}
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media (max-width: 760px) {
+  .sidebar-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .modal-content {
+    width: 92%;
+    padding: 24px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .delete-day-btn {
+    top: 8px;
+    right: 8px;
+  }
 }

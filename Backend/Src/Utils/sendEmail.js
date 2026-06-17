@@ -1,30 +1,28 @@
 import nodemailer from "nodemailer";
 
-// Notice the "export const sendEmail" here! This matches your { sendEmail } import.
-export const sendEmail = async (options) => {
+export const sendEmail = async ({ email, subject, message, html }) => {
   try {
-    // Create a transporter (Replace with your actual SMTP credentials later)
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || "smtp.mailtrap.io",
-      port: process.env.SMTP_PORT || 2525,
+      port: Number(process.env.SMTP_PORT) || 2525,
+      secure: process.env.SMTP_SECURE === "true",
       auth: {
-        user: process.env.SMTP_USER || "your_user",
-        pass: process.env.SMTP_PASS || "your_pass",
-      },
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      }
     });
 
     const mailOptions = {
-      from: "TripMitra <noreply@tripmitra.com>",
-      to: options.email,
-      subject: options.subject,
-      text: options.message,
+      from: process.env.SMTP_FROM || "TripMitra <noreply@tripmitra.com>",
+      to: email,
+      subject,
+      text: message || "",
+      html
     };
 
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully to:", options.email);
-    
+    console.log("Email sent successfully to:", email);
   } catch (error) {
-    console.error("Error sending email:", error);
-    // We don't throw here so the app doesn't crash if an email fails to send
+    console.error("Error sending email:", error.message);
   }
 };

@@ -1,0 +1,82 @@
+.invite-response-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  padding: 20px;
+}
+
+.invite-response-card {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.invite-response-card h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  color: #111827;
+}
+
+.invite-response-card p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.invite-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0 12px;
+}
+
+.accept-invite-btn,
+.reject-invite-btn,
+.invite-login-note a {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.accept-invite-btn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.reject-invite-btn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.invite-login-note {
+  margin: 24px 0;
+}
+
+.invite-login-note a {
+  display: inline-block;
+  background: #2563eb;
+  color: #ffffff;
+  margin-top: 8px;
+}
+
+.invite-response-status {
+  margin-top: 18px;
+  font-weight: 700;
+}
+
+.invite-dashboard-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}

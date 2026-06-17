@@ -1,42 +1,46 @@
 import express from "express";
 import cors from "cors";
-
-// 1. Import all your feature routes
 import authRoutes from "./routes/auth.routes.js";
-import tripRoutes from './routes/trip.routes.js';
+import tripRoutes from "./routes/trip.routes.js";
 import invitationRoutes from "./routes/invitation.routes.js";
 import plannerRoutes from "./routes/planner.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
-import expenseRoutes from "./routes/expense.routes.js"; 
-import notificationRoutes from "./routes/notification.routes.js"; 
-
+import expenseRoutes from "./routes/expense.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import itineraryRoutes from './routes/itinerary.routes.js';
+import tripMemberRoutes from "./routes/tripMember.routes.js";
 const app = express();
 
-// 2. Global Middleware
-app.use(cors()); // Allows your React app on port 3000 to talk to port 5000
-app.use(express.json()); // Allows Express to read req.body JSON data
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true
+  })
+);
+app.use(express.json());
 
-// 3. Health Check Route
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "TripMitra API is fully operational 🚀"
+    message: "TripMitra API is operational"
   });
 });
 
-// 4. Mount the API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/invitations", invitationRoutes);
-app.use("/api/planner", plannerRoutes); 
+app.use("/api/planner", plannerRoutes);
 app.use("/api/activities", activityRoutes);
-app.use("/api/expenses", expenseRoutes); 
-app.use("/api/notifications", notificationRoutes); 
-
-// 5. Global Error Handler (Safety net for crashing routes)
+app.use("/api/expenses", expenseRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/itineraries",itineraryRoutes);
+app.use("/api/trip-members",tripMemberRoutes);
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ success: false, message: "Something broke on the server!" });
+  console.error(err);
+  res.status(500).json({
+    success: false,
+    message: "Something broke on the server"
+  });
 });
 
 export default app;

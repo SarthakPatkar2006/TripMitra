@@ -36,10 +36,7 @@ export default function Register() {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      alert('Account created successfully!');
-      
-      // Redirect to dashboard (we will build this route soon)
-      // navigate('/dashboard'); 
+      navigate('/dashboard');
 
     } catch (err) {
       console.error("Registration Error:", err);

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create a central instance
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Make sure this matches your Node.js port!
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
   headers: {
     'Content-Type': 'application/json',
   },
