@@ -282,8 +282,9 @@
 }
 
 .itinerary-container {
-  max-width: 1200px;
-  margin: 0 auto 40px;
+   max-width: 1700px;
+  width: 95%;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 30px;

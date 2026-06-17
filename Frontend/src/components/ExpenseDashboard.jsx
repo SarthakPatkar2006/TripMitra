@@ -1,9 +1,14 @@
 import React, {
   useEffect,
+  useMemo,
   useState
 } from "react";
 import api from "../api/axiosInstance";
+
 import ExpenseModal from "./ExpenseModal";
+import ExpenseFlowGraph from "./ExpenseFlowGraph";
+import ExpenseCategoryChart from "./ExpenseCategoryChart";
+
 import "./ExpenseDashboard.css";
 
 export default function ExpenseDashboard({
@@ -17,9 +22,17 @@ export default function ExpenseDashboard({
     setSettlements] =
     useState([]);
 
+  const [balances,
+    setBalances] =
+    useState([]);
+
   const [members,
     setMembers] =
     useState([]);
+
+  const [loading,
+    setLoading] =
+    useState(true);
 
   const [showModal,
     setShowModal] =
@@ -32,6 +45,8 @@ export default function ExpenseDashboard({
   const fetchData =
     async () => {
       try {
+        setLoading(true);
+
         const [
           expenseRes,
           settlementRes,
@@ -52,62 +67,78 @@ export default function ExpenseDashboard({
 
         setExpenses(
           expenseRes.data
-            .expenses
+            .expenses || []
         );
 
         setSettlements(
           settlementRes.data
-            .settlements
+            .settlements || []
+        );
+
+        setBalances(
+          settlementRes.data
+            .balances || []
         );
 
         const owner =
-          memberRes.data.owner;
+          memberRes.data
+            .owner;
 
         const accepted =
           memberRes.data
             .members
-            .map(
+            ?.map(
               (m) =>
                 m.userId
             )
-            .filter(Boolean);
+            .filter(Boolean) ||
+          [];
 
         setMembers([
           owner,
           ...accepted
         ]);
       } catch (err) {
-        console.error(err);
+        console.error(
+          "Expense Dashboard Error:",
+          err
+        );
+      } finally {
+        setLoading(false);
       }
     };
 
   const totalSpent =
-    expenses.reduce(
-      (sum, expense) =>
-        sum +
-        expense.amount,
-      0
-    );
+    useMemo(() => {
+      return expenses.reduce(
+        (
+          sum,
+          expense
+        ) =>
+          sum +
+          expense.amount,
+        0
+      );
+    }, [expenses]);
 
-  const remaining =
+  const remainingBudget =
     trip?.budget
       ? trip.budget -
         totalSpent
       : 0;
 
-  const percent =
+  const budgetPercent =
     trip?.budget
       ? Math.min(
           (
             totalSpent /
             trip.budget
-          ) *
-            100,
+          ) * 100,
           100
         )
       : 0;
 
-  const perPerson =
+  const perHead =
     members.length
       ? Math.round(
           totalSpent /
@@ -115,109 +146,277 @@ export default function ExpenseDashboard({
         )
       : totalSpent;
 
+  const categoryIcons = {
+    Food: "🍔",
+    Transport: "🚕",
+    Hotel: "🏨",
+    Activity: "🎟️",
+    Shopping: "🛍️",
+    Other: "📦"
+  };
+
+  if (loading) {
+    return (
+      <div className="expense-loading">
+        Loading expenses...
+      </div>
+    );
+  }
+
   return (
     <section className="expense-dashboard">
 
-      {/* Analytics */}
+      {/* HEADER */}
 
-      <div className="expense-cards">
+      <div className="expense-top">
 
-        <div className="expense-card">
+        <div>
+          <h2>
+            💰 Expense Dashboard
+          </h2>
+
+          <p>
+            Manage trip spending
+            and settlements.
+          </p>
+        </div>
+
+        <button
+          className="expense-btn"
+          onClick={() =>
+            setShowModal(
+              true
+            )
+          }
+        >
+          + Add Expense
+        </button>
+
+      </div>
+
+      {/* ANALYTICS */}
+
+      <div className="analytics-grid">
+
+        <div className="analytics-card">
+          <div className="card-icon">
+            💸
+          </div>
+
           <span>
             Total Spent
           </span>
 
-          <strong>
-            ₹{totalSpent}
-          </strong>
+          <h3>
+            ₹
+            {totalSpent.toLocaleString()}
+          </h3>
         </div>
 
-        <div className="expense-card">
+        <div className="analytics-card">
+          <div className="card-icon">
+            💰
+          </div>
+
           <span>
             Remaining
           </span>
 
-          <strong>
-            ₹{remaining}
-          </strong>
+          <h3>
+            ₹
+            {remainingBudget.toLocaleString()}
+          </h3>
         </div>
 
-        <div className="expense-card">
+        <div className="analytics-card">
+          <div className="card-icon">
+            👥
+          </div>
+
           <span>
             Per Person
           </span>
 
-          <strong>
-            ₹{perPerson}
-          </strong>
+          <h3>
+            ₹
+            {perHead.toLocaleString()}
+          </h3>
         </div>
 
-        <div className="expense-card">
+        <div className="analytics-card">
+          <div className="card-icon">
+            🧾
+          </div>
+
           <span>
             Expenses
           </span>
 
-          <strong>
-            {
-              expenses.length
-            }
-          </strong>
+          <h3>
+            {expenses.length}
+          </h3>
         </div>
 
       </div>
 
-      {/* Budget */}
+      {/* BUDGET */}
 
-      <div className="budget-panel">
+      <div className="expense-panel">
 
-        <h2>
-          Budget Usage
-        </h2>
+        <h3>
+          💰 Budget Usage
+        </h3>
 
         <div className="budget-bar">
           <div
             className="budget-fill"
             style={{
               width:
-                `${percent}%`
+                `${budgetPercent}%`
             }}
           />
         </div>
 
+        <div className="budget-info">
+          <span>
+            ₹
+            {totalSpent.toLocaleString()}
+          </span>
+
+          <span>
+            ₹
+            {trip?.budget?.toLocaleString()}
+          </span>
+        </div>
+
         <p>
-          ₹{totalSpent}
-          {" / "}
-          ₹{trip?.budget}
-          {" ("}
-          {percent.toFixed(
+          {budgetPercent.toFixed(
             1
           )}
-          %)
+          % of your trip budget
+          used
         </p>
 
       </div>
 
-      {/* Expenses */}
+      {/* MEMBER BALANCES */}
 
       <div className="expense-panel">
 
-        <div className="expense-header">
+        <h3>
+          👥 Member Balances
+        </h3>
 
-          <h2>
-            Recent Expenses
-          </h2>
+        <div className="balance-grid">
 
-          <button
-            onClick={() =>
-              setShowModal(
-                true
+          {balances.length ===
+          0 ? (
+            <p>
+              No balance
+              information
+              available.
+            </p>
+          ) : (
+            balances.map(
+              (user) => (
+                <div
+                  key={
+                    user.userId
+                  }
+                  className="balance-card"
+                >
+
+                  <div
+                    className={
+                      user.amount >=
+                      0
+                        ? "avatar positive"
+                        : "avatar negative"
+                    }
+                  >
+                    {user.name
+                      ?.split(
+                        " "
+                      )
+                      .map(
+                        (
+                          word
+                        ) =>
+                          word[0]
+                      )
+                      .join(
+                        ""
+                      )
+                      .slice(
+                        0,
+                        2
+                      )}
+                  </div>
+
+                  <h4>
+                    {
+                      user.name
+                    }
+                  </h4>
+
+                  <h2>
+                    {user.amount >
+                    0
+                      ? "+"
+                      : ""}
+                    ₹
+                    {Math.abs(
+                      user.amount
+                    ).toLocaleString()}
+                  </h2>
+
+                  <span>
+                    {user.amount >
+                    0
+                      ? "Will Receive"
+                      : user.amount <
+                        0
+                      ? "Needs To Pay"
+                      : "Settled"}
+                  </span>
+
+                </div>
               )
-            }
-          >
-            + Expense
-          </button>
+            )
+          )}
 
         </div>
+
+      </div>
+
+      {/* GRAPH + CHART */}
+
+      <div className="visualization-grid">
+
+        <ExpenseFlowGraph
+          balances={
+            balances
+          }
+          settlements={
+            settlements
+          }
+        />
+
+        <ExpenseCategoryChart
+          expenses={
+            expenses
+          }
+        />
+
+      </div>
+
+      {/* RECENT EXPENSES */}
+
+      <div className="expense-panel">
+
+        <h3>
+          🧾 Recent Expenses
+        </h3>
 
         {expenses.length ===
         0 ? (
@@ -235,29 +434,42 @@ export default function ExpenseDashboard({
                 }
                 className="expense-row"
               >
+
                 <div>
+
                   <strong>
+                    {categoryIcons[
+                      expense
+                        .category
+                    ] ||
+                      "📦"}{" "}
                     {
                       expense.title
                     }
                   </strong>
 
                   <p>
-                    Paid by{" "}
+                    👤 Paid by{" "}
                     {
                       expense
                         .paidBy
                         ?.name
                     }
                   </p>
+
+                  <small>
+                    {
+                      expense.category
+                    }
+                  </small>
+
                 </div>
 
-                <h3>
+                <h4>
                   ₹
-                  {
-                    expense.amount
-                  }
-                </h3>
+                  {expense.amount.toLocaleString()}
+                </h4>
+
               </div>
             )
           )
@@ -265,20 +477,33 @@ export default function ExpenseDashboard({
 
       </div>
 
-      {/* Settlement */}
+      {/* SETTLEMENTS */}
 
       <div className="expense-panel">
 
-        <h2>
-          Settlements
-        </h2>
+        <h3>
+          💸 Settlements
+        </h3>
 
         {settlements.length ===
         0 ? (
-          <p>
-            Everyone is
-            settled 🎉
-          </p>
+          <div className="empty-settlement">
+
+            <div className="celebrate">
+              🎉
+            </div>
+
+            <h4>
+              Everyone is
+              settled!
+            </h4>
+
+            <p>
+              No pending
+              payments.
+            </p>
+
+          </div>
         ) : (
           settlements.map(
             (
@@ -286,25 +511,35 @@ export default function ExpenseDashboard({
               index
             ) => (
               <div
-                key={index}
+                key={
+                  index
+                }
                 className="settlement-row"
               >
-                <span>
-                  {
-                    item.from
-                  }
-                  {" owes "}
-                  {
-                    item.to
-                  }
-                </span>
 
-                <strong>
+                <div>
+
+                  <strong>
+                    👤{" "}
+                    {
+                      item.fromName
+                    }
+                  </strong>
+
+                  <p>
+                    owes{" "}
+                    {
+                      item.toName
+                    }
+                  </p>
+
+                </div>
+
+                <h4>
                   ₹
-                  {
-                    item.amount
-                  }
-                </strong>
+                  {item.amount.toLocaleString()}
+                </h4>
+
               </div>
             )
           )
@@ -312,11 +547,11 @@ export default function ExpenseDashboard({
 
       </div>
 
+      {/* MODAL */}
+
       {showModal && (
         <ExpenseModal
-          tripId={
-            tripId
-          }
+          tripId={tripId}
           members={
             members
           }
@@ -330,6 +565,7 @@ export default function ExpenseDashboard({
           }
         />
       )}
+
     </section>
   );
 }

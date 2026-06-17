@@ -60,12 +60,31 @@ export const calculateSettlements = async (tripId) => {
     const creditor = creditors[creditorIndex];
     const amount = Math.min(debtor.amount, creditor.amount);
 
-    settlements.push({
-      from: debtor.userId,
-      to: creditor.userId,
-      amount: Number(amount.toFixed(2))
-    });
+   const debtorUser =
+  await User.findById(
+    debtor.userId
+  );
 
+const creditorUser =
+  await User.findById(
+    creditor.userId
+  );
+
+settlements.push({
+  from:
+    debtor.userId,
+
+  fromName:
+    debtorUser?.name,
+
+  to:
+    creditor.userId,
+
+  toName:
+    creditorUser?.name,
+
+  amount
+});
     debtor.amount = Number((debtor.amount - amount).toFixed(2));
     creditor.amount = Number((creditor.amount - amount).toFixed(2));
 
