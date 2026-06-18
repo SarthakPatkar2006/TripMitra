@@ -1,0 +1,69 @@
+Things That Still Need To Be Built
+Phase 1 (Highest Priority)
+Finish itinerary module
+
+Implement:
+
+Create Day
+Get Day
+Update Day
+Delete Day
+Reorder Days
+Finish activity management
+
+Need:
+
+Edit Activity
+Delete Activity
+Move Activity
+Complete frontend integration
+
+Connect:
+
+Trip Details
+Activities
+Expenses
+Notifications
+Planner
+Phase 2
+Expense Dashboard
+
+Features:
+
+Add Expense
+View Expenses
+Settlement UI
+Who owes whom
+Member balances
+Group Management
+
+Features:
+
+Accept Invite
+Reject Invite
+View Members
+Remove Members
+Phase 3
+AI Features
+
+Your original vision included:
+
+Budget-aware planning
+Maximum attractions coverage
+Optimized routes
+Time estimation
+Hotel suggestions
+Transport suggestions
+
+These are not fully visible yet.
+
+Phase 4
+Analytics Dashboard
+
+Ideas:
+
+Total expenses
+Budget used
+Places covered
+Remaining budget
+Trip statistics
