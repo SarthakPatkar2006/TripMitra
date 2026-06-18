@@ -23,8 +23,7 @@ const canAccessTrip = async (tripId, userId) => {
 
   const membership = await TripMember.findOne({
     tripId,
-    userId,
-    status: "accepted"
+    userId
   });
 
   return {
@@ -50,23 +49,33 @@ export const createTrip = async (req, res) => {
 
     if (!origin || !destination || !startDate || !endDate || !budget) {
       return res.status(400).json({
-        message: "Origin, destination, dates, and budget are required"
+        message:
+          "Origin, destination, dates, and budget are required"
       });
     }
 
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      return res.status(400).json({ message: "Invalid trip dates" });
+    if (
+      Number.isNaN(start.getTime()) ||
+      Number.isNaN(end.getTime())
+    ) {
+      return res.status(400).json({
+        message: "Invalid trip dates"
+      });
     }
 
     if (end < start) {
-      return res.status(400).json({ message: "End date cannot be before start date" });
+      return res.status(400).json({
+        message: "End date cannot be before start date"
+      });
     }
 
     const newTrip = await Trip.create({
-      title: title?.trim() || `${destination.trim()} Adventure`,
+      title:
+        title?.trim() ||
+        `${destination.trim()} Adventure`,
       origin: origin.trim(),
       destination: destination.trim(),
       startDate: start,
@@ -82,10 +91,7 @@ export const createTrip = async (req, res) => {
     await TripMember.create({
       tripId: newTrip._id,
       userId: req.user._id,
-      email: req.user.email,
-      role: "owner",
-      status: "accepted",
-      joinedAt: new Date()
+      role: "owner"
     });
 
     res.status(201).json({
@@ -95,7 +101,10 @@ export const createTrip = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating trip:", error);
-    res.status(500).json({ message: "Server error creating trip" });
+
+    res.status(500).json({
+      message: "Server error creating trip"
+    });
   }
 };
 
@@ -104,14 +113,18 @@ export const getTrips = async (req, res) => {
     const userId = getUserId(req);
 
     const memberships = await TripMember.find({
-      userId,
-      status: "accepted"
+      userId
     }).select("tripId");
 
-    const memberTripIds = memberships.map((member) => member.tripId);
+    const memberTripIds = memberships.map(
+      (member) => member.tripId
+    );
 
     const trips = await Trip.find({
-      $or: [{ owner: userId }, { _id: { $in: memberTripIds } }]
+      $or: [
+        { owner: userId },
+        { _id: { $in: memberTripIds } }
+      ]
     }).sort({ startDate: 1 });
 
     res.status(200).json({
@@ -120,8 +133,14 @@ export const getTrips = async (req, res) => {
       trips
     });
   } catch (error) {
-    console.error("Error fetching user trips:", error);
-    res.status(500).json({ message: "Server error fetching trips" });
+    console.error(
+      "Error fetching user trips:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Server error fetching trips"
+    });
   }
 };
 
@@ -186,7 +205,19 @@ export const updateTrip = async (req, res) => {
         updates[field] = req.body[field];
       }
     });
+const start = updates.startDate
+  ? new Date(updates.startDate)
+  : trip.startDate;
 
+const end = updates.endDate
+  ? new Date(updates.endDate)
+  : trip.endDate;
+
+if (end < start) {
+  return res.status(400).json({
+    message: "End date cannot be before start date"
+  });
+}
     const updatedTrip = await Trip.findByIdAndUpdate(id, updates, {
       new: true,
       runValidators: true

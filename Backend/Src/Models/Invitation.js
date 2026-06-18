@@ -21,6 +21,12 @@ const invitationSchema = new mongoose.Schema(
       required: true
     },
 
+    token: {
+      type: String,
+      required: true,
+      unique: true
+    },
+
     status: {
       type: String,
       enum: [
@@ -31,6 +37,7 @@ const invitationSchema = new mongoose.Schema(
       ],
       default: "pending"
     },
+    
 
     expiresAt: {
       type: Date,
@@ -41,7 +48,6 @@ const invitationSchema = new mongoose.Schema(
     timestamps: true
   }
 );
-
 export default mongoose.model(
   "Invitation",
   invitationSchema

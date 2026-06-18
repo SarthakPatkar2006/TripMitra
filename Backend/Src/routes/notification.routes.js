@@ -1,11 +1,30 @@
 import { Router } from "express";
-import { getUserNotifications, markAsRead } from "../Controllers/notification.controller.js";
 import { protect } from "../Middlewares/auth.middleware.js";
+
+import {
+  getNotifications,
+  markAsRead,
+  markAllAsRead
+} from "../Controllers/notification.controller.js";
 
 const router = Router();
 
-// A user must be logged in to check their notifications
-router.get("/", protect, getUserNotifications);
-router.patch("/:notificationId/read", protect, markAsRead);
+router.get(
+  "/",
+  protect,
+  getNotifications
+);
+router.patch(
+  "/read-all",
+  protect,
+  markAllAsRead
+);
+
+router.patch(
+  "/:id/read",
+  protect,
+  markAsRead
+);
+
 
 export default router;

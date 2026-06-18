@@ -9,6 +9,7 @@ import expenseRoutes from "./routes/expense.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import itineraryRoutes from './routes/itinerary.routes.js';
 import tripMemberRoutes from "./routes/tripMember.routes.js";
+import recommendationRoutes from "./routes/recommendation.routes.js";
 const app = express();
 
 app.use(
@@ -35,6 +36,7 @@ app.use("/api/expenses", expenseRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/itineraries",itineraryRoutes);
 app.use("/api/trip-members",tripMemberRoutes);
+app.use("/api/recommendations",recommendationRoutes);
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({

@@ -7,30 +7,22 @@ const tripMemberSchema = new mongoose.Schema(
       ref: "Trip",
       required: true
     },
+
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      default: null
+      required: true
     },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true
-    },
+
     role: {
       type: String,
       enum: ["owner", "member"],
       default: "member"
     },
-    status: {
-      type: String,
-      enum: ["pending", "accepted", "declined"],
-      default: "pending"
-    },
+
     joinedAt: {
       type: Date,
-      default: null
+      default: Date.now
     }
   },
   {
@@ -38,6 +30,17 @@ const tripMemberSchema = new mongoose.Schema(
   }
 );
 
-tripMemberSchema.index({ tripId: 1, email: 1 }, { unique: true });
+tripMemberSchema.index(
+  {
+    tripId: 1,
+    userId: 1
+  },
+  {
+    unique: true
+  }
+);
 
-export default mongoose.model("TripMember", tripMemberSchema);
+export default mongoose.model(
+  "TripMember",
+  tripMemberSchema
+);
