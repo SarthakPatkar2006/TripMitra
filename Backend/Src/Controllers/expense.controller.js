@@ -1,198 +1,215 @@
 import Expense from "../Models/Expense.js";
-import { calculateSettlements }
-from "../Services/expense.service.js";
+import Trip from "../Models/Trip.js";
+import Notification
+from "../Models/Notification.js";
 
-// ==============================
-// Create Expense
-// ==============================
+export const addExpense =
+  async (req, res) => {
+    try {
+      const { tripId } =
+        req.params;
 
-export async function createExpense(
-  req,
-  res
-) {
-  try {
-    const {
-      tripId,
-      title,
-      description,
-      category,
-      amount,
-      splitBetween,
-      expenseDate
-    } = req.body;
-
-    const paidBy =
-      req.user._id;
-
-    if (
-      !tripId ||
-      !title ||
-      !amount ||
-      !splitBetween ||
-      splitBetween.length === 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "All expense fields are required."
-      });
-    }
-
-    const newExpense =
-      await Expense.create({
-        tripId,
+      const {
         title,
         description,
         category,
         amount,
         paidBy,
-        splitBetween,
+        splitType,
+        splitAmong,
         expenseDate
-      });
+      } = req.body;
 
-    res.status(201).json({
-      success: true,
-      message:
-        "Expense logged successfully!",
-      expense: newExpense
-    });
-  } catch (error) {
-    console.error(
-      "Error creating expense:",
-      error
-    );
+      const trip =
+        await Trip.findById(
+          tripId
+        );
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Internal Server Error"
-    });
-  }
-}
+      if (!trip) {
+        return res
+          .status(404)
+          .json({
+            message:
+              "Trip not found"
+          });
+      }
 
-// ==============================
-// Get All Expenses Of Trip
-// ==============================
-
-export async function getTripExpenses(
-  req,
-  res
-) {
-  try {
-    const { tripId } =
-      req.params;
-
-    const expenses =
-      await Expense.find({
-        tripId
-      })
-        .populate(
-          "paidBy",
-          "name email"
-        )
-        .populate(
-          "splitBetween.userId",
-          "name email"
-        )
-        .sort({
-          expenseDate: -1
+      const expense =
+        await Expense.create({
+          tripId,
+          title,
+          description,
+          category,
+          amount,
+          paidBy,
+          splitType,
+          splitAmong,
+          expenseDate,
+          createdBy:
+            req.user._id
         });
 
-    res.status(200).json({
-      success: true,
-      expenses
-    });
-  } catch (error) {
-    console.error(
-      "Error fetching expenses:",
-      error
-    );
+      await Notification.create({
+        userId:
+          trip.owner,
+        type:
+          "expense_added",
+        message:
+          `${req.user.name} added ${title} expense (₹${amount}).`,
+        tripId
+      });
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Internal Server Error"
-    });
-  }
-}
-
-// ==============================
-// Delete Expense
-// ==============================
-
-export async function deleteExpense(
-  req,
-  res
-) {
-  try {
-    const expense =
-      await Expense.findByIdAndDelete(
-        req.params.id
+      res.status(201).json({
+        success: true,
+        expense
+      });
+    } catch (error) {
+      console.error(
+        "Add expense error:",
+        error
       );
 
-    if (!expense) {
-      return res.status(404).json({
-        success: false,
+      res.status(500).json({
         message:
-          "Expense not found"
+          "Internal Server Error"
       });
     }
+  };
+  export const getExpenses =
+  async (req, res) => {
+    try {
+      const expenses =
+        await Expense.find({
+          tripId:
+            req.params.tripId
+        })
+          .populate(
+            "paidBy",
+            "name email"
+          )
+          .populate(
+            "createdBy",
+            "name email"
+          )
+          .sort({
+            expenseDate: -1
+          });
 
-    res.status(200).json({
-      success: true,
-      message:
-        "Expense deleted successfully"
-    });
-  } catch (error) {
-    console.error(
-      "Error deleting expense:",
-      error
-    );
+      res.status(200).json({
+        success: true,
+        expenses
+      });
+    } catch (error) {
+      console.error(error);
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Internal Server Error"
-    });
-  }
-}
+      res.status(500).json({
+        message:
+          "Internal Server Error"
+      });
+    }
+  };
+export const updateExpense =
+  async (req, res) => {
+    try {
+      const {
+        expenseId
+      } = req.params;
 
-// ==============================
-// Get Settlements
-// ==============================
+      const expense =
+        await Expense.findById(
+          expenseId
+        );
 
-export async function getTripSettlements(
-  req,
-  res
-) {
-  try {
-    const { tripId } =
-      req.params;
+      if (!expense) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+            message:
+              "Expense not found"
+          });
+      }
 
-    const settlementData =
-      await calculateSettlements(
-        tripId
+      const {
+        title,
+        description,
+        category,
+        amount,
+        paidBy,
+        expenseDate
+      } = req.body;
+
+      expense.title =
+        title ??
+        expense.title;
+
+      expense.description =
+        description ??
+        expense.description;
+
+      expense.category =
+        category ??
+        expense.category;
+
+      expense.amount =
+        amount ??
+        expense.amount;
+
+      expense.paidBy =
+        paidBy ??
+        expense.paidBy;
+
+      expense.expenseDate =
+        expenseDate ??
+        expense.expenseDate;
+
+      await expense.save();
+
+      res.status(200).json({
+        success: true,
+        expense
+      });
+    } catch (error) {
+      console.error(
+        error
       );
 
-    res.status(200).json({
-      success: true,
-      message:
-        "Settlements calculated optimally!",
-      balances:
-        settlementData.balances,
-      settlements:
-        settlementData.settlements
-    });
-  } catch (error) {
-    console.error(
-      "Error calculating settlements:",
-      error
-    );
+      res.status(500).json({
+        success: false,
+        message:
+          "Internal Server Error"
+      });
+    }
+  };
+  export const deleteExpense =
+  async (req, res) => {
+    try {
+      const expense =
+        await Expense.findByIdAndDelete(
+          req.params
+            .expenseId
+        );
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Internal Server Error"
-    });
-  }
-}
+      if (!expense) {
+        return res
+          .status(404)
+          .json({
+            message:
+              "Expense not found"
+          });
+      }
+
+      res.status(200).json({
+        success: true,
+        message:
+          "Expense deleted"
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        message:
+          "Internal Server Error"
+      });
+    }
+  };

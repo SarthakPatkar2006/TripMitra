@@ -1,0 +1,40 @@
+.invitations-page {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+.invitation-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.invitation-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px
+    rgba(0, 0, 0, 0.08);
+}
+
+.invitation-card p {
+  margin: 12px 0;
+}
+
+.invitation-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.invitation-actions button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.empty-state {
+  padding: 80px;
+  text-align: center;
+}

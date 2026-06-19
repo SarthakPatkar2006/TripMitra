@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
-import tripRoutes from "./routes/trip.routes.js";
+
 import invitationRoutes from "./routes/invitation.routes.js";
 import plannerRoutes from "./routes/planner.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
@@ -10,6 +10,14 @@ import notificationRoutes from "./routes/notification.routes.js";
 import itineraryRoutes from './routes/itinerary.routes.js';
 import tripMemberRoutes from "./routes/tripMember.routes.js";
 import recommendationRoutes from "./routes/recommendation.routes.js";
+import financeRoutes from "./routes/finance.routes.js";
+import tripRoutes from "./routes/trip.routes.js";
+import walletRoutes from "./routes/wallet.routes.js";
+
+
+
+
+
 const app = express();
 
 app.use(
@@ -32,11 +40,13 @@ app.use("/api/trips", tripRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/planner", plannerRoutes);
 app.use("/api/activities", activityRoutes);
-app.use("/api/expenses", expenseRoutes);
+app.use("/api/", expenseRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/itineraries",itineraryRoutes);
 app.use("/api/trip-members",tripMemberRoutes);
 app.use("/api/recommendations",recommendationRoutes);
+app.use("/api",financeRoutes);
+app.use("/api",walletRoutes);
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({

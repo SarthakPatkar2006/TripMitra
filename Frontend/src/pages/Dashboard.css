@@ -184,3 +184,8 @@
   font-weight: 500;
 }
 .route-text .arrow { color: #9ca3af; margin: 0 4px; }
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}

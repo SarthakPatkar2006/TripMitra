@@ -13,9 +13,28 @@ const router = Router();
 
 router.post("/", protect, createTrip);
 router.get("/", protect, getTrips);
-router.get("/:id", protect, getTripById);
-router.put("/:id", protect, updateTrip);
-router.delete("/:id", protect, deleteTrip);
-router.get("/:tripId/members", protect, getTripMembers);
 
+router.get(
+  "/:tripId/members",
+  protect,
+  getTripMembers
+);
+
+router.get(
+  "/:id",
+  protect,
+  getTripById
+);
+
+router.put(
+  "/:id",
+  protect,
+  updateTrip
+);
+
+router.delete(
+  "/:id",
+  protect,
+  deleteTrip
+);
 export default router;

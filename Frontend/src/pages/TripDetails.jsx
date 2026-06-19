@@ -4,10 +4,17 @@ import api from "../api/axiosInstance";
 import "./TripDetails.css";
 import TripMap from "./TripMap";
 import ExpenseDashboard from "../components/ExpenseDashboard";
+import TripTabs from "../components/trip/TripTabs";
+import TripOverview from "../components/trip/TripOverview";
+import TripMembers from "../components/trip/TripMembers";
+import TripRecommendations from "../components/trip/TripRecommendations";
+import TripExpenses from "../components/trip/TripExpenses";
+import TripNotes from "../components/trip/TripNotes";
 export default function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+const [activeTab, setActiveTab] =
+  useState("overview");
   const [trip, setTrip] = useState(null);
   const [itinerary, setItinerary] = useState([]);
   const [userRole, setUserRole] = useState("member");
@@ -15,7 +22,8 @@ export default function TripDetails() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [members, setMembers] =
+  useState([]);
   // Day Modal
   const [showAddDayModal, setShowAddDayModal] =
     useState(false);
@@ -42,8 +50,9 @@ export default function TripDetails() {
     });
 
   useEffect(() => {
-    fetchTripData();
-  }, [id]);
+  fetchTripData();
+  fetchMembers();
+}, [id]);
 
   const fetchTripData = async () => {
     try {
@@ -96,7 +105,29 @@ export default function TripDetails() {
   // ==========================
   // Trip
   // ==========================
+const fetchMembers = async () => {
+  try {
+    const res = await api.get(
+      `/trips/${id}/members`
+    );
 
+    // console.log(
+    //   "Members Response:",
+    //   res.data
+    // );
+
+    setMembers(
+      res.data.members || []
+    );
+  } catch (err) {
+    console.error(
+      "Members fetch error:",
+      err
+    );
+
+    setMembers([]);
+  }
+};
   const handleDeleteTrip =
     async () => {
       const confirmDelete =
@@ -382,422 +413,281 @@ export default function TripDetails() {
       </div>
     </div>
   </header>
+<TripTabs
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+/>
+ <div className="trip-tab-content">
 
-  {/* ================= MAP ================= */}
+  {activeTab === "overview" && (
+    <TripOverview
+      trip={trip}
+      itinerary={itinerary}
+      userRole={userRole}
+    />
+  )}
 
-  <div
-    className="map-section"
-    style={{
-      margin: "20px 0",
-      zIndex: 1
-    }}
-  >
-    <TripMap days={itinerary} />
-  </div>
+  {activeTab === "members" && (
+    <TripMembers
+      tripId={id}
+      userRole={userRole}
+    />
+  )}
 
-  {/* ================= BODY ================= */}
+  {activeTab === "planner" && (
+    <>
+      {/* ================= MAP ================= */}
 
-  <main className="itinerary-container">
-
-    {/* ========= LEFT SIDEBAR ========= */}
-
-    <aside className="day-tabs">
-
-      <div className="sidebar-header">
-        <h3>Your Itinerary</h3>
-
-        {userRole === "owner" && (
-          <button
-            className="add-day-btn"
-            onClick={() =>
-              setShowAddDayModal(true)
-            }
-          >
-            + Day
-          </button>
-        )}
+      <div
+        className="map-section"
+        style={{
+          margin: "20px 0",
+          zIndex: 1
+        }}
+      >
+        <TripMap days={itinerary} />
       </div>
 
-      {itinerary.length === 0 ? (
-        <p className="no-days">
-          No days planned yet.
-        </p>
-      ) : (
-        itinerary.map((day) => (
-          <div
-            key={day._id}
-            className={`tab-btn ${
-              activeDay === day.dayNumber
-                ? "active"
-                : ""
-            }`}
-            onClick={() =>
-              setActiveDay(
-                day.dayNumber
-              )
-            }
-          >
-            <div className="tab-title">
-              Day {day.dayNumber}
-            </div>
+      {/* ================= BODY ================= */}
 
-            <div className="tab-date">
-              {new Date(
-                day.date
-              ).toLocaleDateString(
-                undefined,
-                {
-                  weekday:
-                    "short",
-                  month:
-                    "short",
-                  day: "numeric"
-                }
-              )}
-            </div>
+      <main className="itinerary-container">
 
-            {userRole ===
-              "owner" && (
+        {/* ========= LEFT SIDEBAR ========= */}
+
+        <aside className="day-tabs">
+
+          <div className="sidebar-header">
+            <h3>Your Itinerary</h3>
+
+            {userRole === "owner" && (
               <button
-                className="delete-day-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-
-                  handleDeleteDay(
-                    day._id
-                  );
-                }}
+                className="add-day-btn"
+                onClick={() =>
+                  setShowAddDayModal(true)
+                }
               >
-                ✕
+                + Day
               </button>
             )}
           </div>
-        ))
-      )}
-    </aside>
 
-    {/* ========= ACTIVITIES ========= */}
-
-    <section className="activities-feed">
-
-      {currentDayData ? (
-        <>
-          <div className="feed-header">
-
-            <div>
-              <h2>
-                Day{" "}
-                {
-                  currentDayData.dayNumber
-                }{" "}
-                Plan
-              </h2>
-
-              {currentDayData.notes && (
-                <p className="day-notes">
-                  📝{" "}
-                  {
-                    currentDayData.notes
-                  }
-                </p>
-              )}
-            </div>
-
-            {userRole ===
-              "owner" && (
-              <button
-                className="add-activity-btn"
+          {itinerary.length === 0 ? (
+            <p className="no-days">
+              No days planned yet.
+            </p>
+          ) : (
+            itinerary.map((day) => (
+              <div
+                key={day._id}
+                className={`tab-btn ${
+                  activeDay === day.dayNumber
+                    ? "active"
+                    : ""
+                }`}
                 onClick={() =>
-                  setShowActivityModal(
-                    true
+                  setActiveDay(
+                    day.dayNumber
                   )
                 }
               >
-                + Add Stop
-              </button>
-            )}
-          </div>
+                <div className="tab-title">
+                  Day {day.dayNumber}
+                </div>
 
-          {currentDayData.activities &&
-          currentDayData.activities
-            .length > 0 ? (
-            <div className="timeline">
-
-              {currentDayData.activities.map(
-                (activity) => (
-                  <div
-                    key={
-                      activity._id
+                <div className="tab-date">
+                  {new Date(
+                    day.date
+                  ).toLocaleDateString(
+                    undefined,
+                    {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric"
                     }
-                    className="activity-card"
+                  )}
+                </div>
+
+                {userRole === "owner" && (
+                  <button
+                    className="delete-day-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteDay(day._id);
+                    }}
                   >
-                    <div className="activity-bullet"></div>
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))
+          )}
+        </aside>
 
-                    <div className="activity-content">
+        {/* ========= ACTIVITIES ========= */}
 
-                      <h3>
-                        {
-                          activity.title
-                        }
-                      </h3>
+        <section className="activities-feed">
 
-                      {activity.location && (
-                        <p className="location">
-                          📍{" "}
-                          {
-                            activity.location
-                          }
-                        </p>
-                      )}
+          {currentDayData ? (
+            <>
+              <div className="feed-header">
+                <div>
+                  <h2>
+                    Day{" "}
+                    {
+                      currentDayData.dayNumber
+                    }{" "}
+                    Plan
+                  </h2>
 
-                      {activity.description && (
-                        <p className="description">
-                          {
-                            activity.description
-                          }
-                        </p>
-                      )}
+                  {currentDayData.notes && (
+                    <p className="day-notes">
+                      📝{" "}
+                      {
+                        currentDayData.notes
+                      }
+                    </p>
+                  )}
+                </div>
 
-                      {activity.startTime &&
-                        activity.endTime && (
-                          <p>
-                            🕒{" "}
+                {userRole ===
+                  "owner" && (
+                  <button
+                    className="add-activity-btn"
+                    onClick={() =>
+                      setShowActivityModal(
+                        true
+                      )
+                    }
+                  >
+                    + Add Stop
+                  </button>
+                )}
+              </div>
+
+              {currentDayData.activities
+                ?.length > 0 ? (
+                <div className="timeline">
+
+                  {currentDayData.activities.map(
+                    (activity) => (
+                      <div
+                        key={activity._id}
+                        className="activity-card"
+                      >
+                        <div className="activity-bullet"></div>
+
+                        <div className="activity-content">
+
+                          <h3>
                             {
-                              activity.startTime
+                              activity.title
                             }
-                            {" "}
-                            -
-                            {" "}
-                            {
-                              activity.endTime
-                            }
-                          </p>
-                        )}
+                          </h3>
 
-                      {activity.estimatedCost >
-                        0 && (
-                        <p>
-                          💰 ₹
-                          {
-                            activity.estimatedCost
-                          }
-                        </p>
-                      )}
+                          {activity.location && (
+                            <p className="location">
+                              📍{" "}
+                              {
+                                activity.location
+                              }
+                            </p>
+                          )}
 
-                      {userRole ===
-                        "owner" && (
-                        <button
-                          className="delete-activity-btn"
-                          onClick={() =>
-                            handleDeleteActivity(
-                              activity._id
-                            )
-                          }
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )
+                          {activity.description && (
+                            <p className="description">
+                              {
+                                activity.description
+                              }
+                            </p>
+                          )}
+
+                          {activity.startTime &&
+                            activity.endTime && (
+                              <p>
+                                🕒{" "}
+                                {
+                                  activity.startTime
+                                }
+                                {" - "}
+                                {
+                                  activity.endTime
+                                }
+                              </p>
+                            )}
+
+                          {activity.estimatedCost >
+                            0 && (
+                            <p>
+                              💰 ₹
+                              {
+                                activity.estimatedCost
+                              }
+                            </p>
+                          )}
+
+                          {userRole ===
+                            "owner" && (
+                            <button
+                              className="delete-activity-btn"
+                              onClick={() =>
+                                handleDeleteActivity(
+                                  activity._id
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="empty-activities">
+                  <p>
+                    No activities
+                    scheduled for this
+                    day yet.
+                  </p>
+                </div>
               )}
-            </div>
+            </>
           ) : (
             <div className="empty-activities">
               <p>
-                No activities
-                scheduled for this
-                day yet.
+                Select a day to view
+                details.
               </p>
             </div>
           )}
-        </>
-      ) : (
-        <div className="empty-activities">
-          <p>
-            Select a day to
-            view details.
-          </p>
-        </div>
-      )}
-    </section>
-  </main>
-
-  {/* ================= ADD DAY MODAL ================= */}
-
-  {showAddDayModal && (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Add Day</h2>
-
-        <input
-          type="date"
-          value={newDay.date}
-          onChange={(e) =>
-            setNewDay({
-              ...newDay,
-              date:
-                e.target.value
-            })
-          }
-        />
-
-        <textarea
-          rows={4}
-          placeholder="Notes"
-          value={newDay.notes}
-          onChange={(e) =>
-            setNewDay({
-              ...newDay,
-              notes:
-                e.target.value
-            })
-          }
-        />
-
-        <div className="modal-actions">
-          <button
-            onClick={
-              handleCreateDay
-            }
-          >
-            Save
-          </button>
-
-          <button
-            onClick={() =>
-              setShowAddDayModal(
-                false
-              )
-            }
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
+        </section>
+      </main>
+    </>
   )}
 
-  {/* ================= ADD ACTIVITY MODAL ================= */}
-
-  {showActivityModal && (
-    <div className="modal-overlay">
-      <div className="modal-content">
-
-        <h2>Add Activity</h2>
-
-        <input
-          placeholder="Title"
-          value={
-            newActivity.title
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              title:
-                e.target.value
-            })
-          }
-        />
-
-        <input
-          placeholder="Location"
-          value={
-            newActivity.location
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              location:
-                e.target.value
-            })
-          }
-        />
-
-        <textarea
-          rows={4}
-          placeholder="Description"
-          value={
-            newActivity.description
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              description:
-                e.target.value
-            })
-          }
-        />
-
-        <input
-          type="time"
-          value={
-            newActivity.startTime
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              startTime:
-                e.target.value
-            })
-          }
-        />
-
-        <input
-          type="time"
-          value={
-            newActivity.endTime
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              endTime:
-                e.target.value
-            })
-          }
-        />
-
-        <input
-          type="number"
-          placeholder="Estimated Cost"
-          value={
-            newActivity.estimatedCost
-          }
-          onChange={(e) =>
-            setNewActivity({
-              ...newActivity,
-              estimatedCost:
-                e.target.value
-            })
-          }
-        />
-
-        <div className="modal-actions">
-          <button
-            onClick={
-              handleCreateActivity
-            }
-          >
-            Save
-          </button>
-
-          <button
-            onClick={() =>
-              setShowActivityModal(
-                false
-              )
-            }
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
+  {activeTab ===
+    "recommendations" && (
+    <TripRecommendations
+      trip={trip}
+      itinerary={itinerary}
+    />
   )}
-  <ExpenseDashboard
-  trip={trip}
+
+  {activeTab === "expenses" && (
+   <TripExpenses
   tripId={id}
+  members={members}
 />
+  )}
+
+  {activeTab === "notes" && (
+    <TripNotes
+      trip={trip}
+      tripId={id}
+    />
+  )}
+</div>
 </div>
 );
 }

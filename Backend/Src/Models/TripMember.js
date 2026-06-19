@@ -40,7 +40,8 @@ tripMemberSchema.index(
   }
 );
 
-export default mongoose.model(
-  "TripMember",
-  tripMemberSchema
-);
+export default mongoose.models.TripMember ||
+  mongoose.model(
+    "TripMember",
+    tripMemberSchema
+  );

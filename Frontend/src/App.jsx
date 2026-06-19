@@ -8,7 +8,7 @@ import TripDetails from './pages/TripDetails';
 import InviteResponse from './pages/InviteResponse';
 import ProtectedRoute from "./pages/ProtectedRoute";
 import PublicRoute from "./pages/PublicRoute";
-
+import InvitePage from "./pages/InvitePage";
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +24,10 @@ function App() {
     }
   />
 
+<Route
+  path="/invite/:token"
+  element={<InvitePage />}
+/>
   <Route
     path="/register"
     element={

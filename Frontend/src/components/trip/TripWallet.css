@@ -1,0 +1,564 @@
+/* ===========================================================
+   TripWallet — premium dark theme
+   Drop this file in next to TripWallet.jsx as ./TripWallet.css
+   =========================================================== */
+
+.tw-root {
+  --bg: #0b0e14;
+  --surface: #151922;
+  --surface-raised: #1e2430;
+  --border: #262c38;
+  --text: #e8eaed;
+  --text-muted: #7c8694;
+  --text-faint: #4d5563;
+  --mint: #5ee6b8;
+  --mint-dim: #5ee6b81a;
+  --coral: #ff6b6b;
+  --coral-dim: #ff6b6b1a;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 28px 16px 48px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.tw-root * {
+  box-sizing: border-box;
+}
+
+.tw-wallet {
+  max-width: 460px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---------- Hero ---------- */
+
+.tw-hero {
+  position: relative;
+  background: linear-gradient(155deg, var(--surface) 0%, #11141c 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px 22px;
+  overflow: hidden;
+}
+
+.tw-hero-glow {
+  position: absolute;
+  top: -80px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, var(--mint-dim) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.tw-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.tw-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.tw-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 3px var(--mint-dim);
+}
+
+.tw-trip-id {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.03em;
+}
+
+.tw-hero-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.tw-balance-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tw-balance-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tw-balance-figure {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--text) 0%, var(--mint) 140%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tw-rupee {
+  font-size: 24px;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-right: 2px;
+}
+
+.tw-ring-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.tw-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.tw-ring-track {
+  fill: none;
+  stroke: var(--surface-raised);
+  stroke-width: 9;
+}
+
+.tw-ring-progress {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 6px var(--mint-dim));
+}
+
+.tw-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tw-ring-pct {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.tw-ring-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tw-stats {
+  display: flex;
+  align-items: center;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.tw-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.tw-stat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tw-stat-icon-in {
+  background: var(--mint-dim);
+  color: var(--mint);
+}
+
+.tw-stat-icon-out {
+  background: var(--coral-dim);
+  color: var(--coral);
+}
+
+.tw-stat-value {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.tw-stat-label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.tw-stat-divider {
+  width: 1px;
+  height: 30px;
+  background: var(--border);
+  margin: 0 14px;
+}
+
+/* ---------- Contribute ---------- */
+
+.tw-contribute {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+}
+
+.tw-contribute-head h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tw-contribute-head p {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tw-form {
+  display: flex;
+  gap: 10px;
+}
+
+.tw-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 14px;
+  transition: border-color 0.15s;
+}
+
+.tw-input-wrap:focus-within {
+  border-color: var(--mint);
+}
+
+.tw-input-prefix {
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  margin-right: 4px;
+}
+
+.tw-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  padding: 13px 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.tw-input::-webkit-outer-spin-button,
+.tw-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tw-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.tw-input::placeholder {
+  color: var(--text-faint);
+}
+
+.tw-submit {
+  background: var(--mint);
+  color: #0b0e14;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.tw-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.tw-submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.tw-submit:disabled {
+  background: var(--surface-raised);
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.tw-quick-amounts {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tw-chip {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.tw-chip:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+}
+
+/* ---------- Transactions ---------- */
+
+.tw-transactions {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px 8px;
+}
+
+.tw-tx-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tw-tx-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tw-tx-count {
+  background: var(--surface-raised);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-family: "JetBrains Mono", monospace;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.tw-tx-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tw-tx-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+
+.tw-tx-row:first-child {
+  border-top: none;
+}
+
+.tw-tx-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tw-tx-icon-in {
+  background: var(--mint-dim);
+  color: var(--mint);
+}
+
+.tw-tx-icon-out {
+  background: var(--coral-dim);
+  color: var(--coral);
+}
+
+.tw-tx-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tw-tx-desc {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tw-tx-time {
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.tw-tx-amount {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tw-amount-in {
+  color: var(--mint);
+}
+
+.tw-amount-out {
+  color: var(--text);
+}
+
+.tw-empty {
+  text-align: center;
+  padding: 36px 10px 28px;
+}
+
+.tw-empty-icon {
+  font-size: 28px;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+
+.tw-empty h4 {
+  margin: 0 0 6px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.tw-empty p {
+  margin: 0 auto;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  max-width: 240px;
+}
+
+/* ---------- Skeleton (loading state) ---------- */
+
+.tw-skeleton-wrap {
+  max-width: 460px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tw-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-raised) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: tw-shimmer 1.4s infinite;
+  border-radius: var(--radius-lg);
+}
+
+.tw-skeleton-hero {
+  height: 200px;
+}
+
+.tw-skeleton-card {
+  height: 110px;
+}
+
+.tw-skeleton-row {
+  height: 56px;
+}
+
+@keyframes tw-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tw-ring-progress {
+    transition: none;
+  }
+  .tw-skeleton {
+    animation: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .tw-balance-figure {
+    font-size: 30px;
+  }
+  .tw-ring-wrap {
+    width: 80px;
+    height: 80px;
+  }
+}

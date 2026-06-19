@@ -75,4 +75,11 @@ const tripSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Trip", tripSchema);
+const Trip =
+  mongoose.models.Trip ||
+  mongoose.model(
+    "Trip",
+    tripSchema
+  );
+
+export default Trip;

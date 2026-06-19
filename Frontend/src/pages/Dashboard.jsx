@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axiosInstance';
 import './Dashboard.css';
-
+import NotificationBell from "../components/NotificationBell";
 export default function Dashboard() {
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,10 +43,20 @@ export default function Dashboard() {
         <div className="nav-brand">
           <h2>TripMitra</h2>
         </div>
-        <div className="nav-actions">
-          <span className="user-greeting">Welcome, {user.name}</span>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
-        </div>
+    <div className="nav-actions">
+  <NotificationBell />
+
+  <span className="user-greeting">
+    Welcome, {user.name}
+  </span>
+
+  <button
+    onClick={handleLogout}
+    className="logout-btn"
+  >
+    Logout
+  </button>
+</div>   
       </nav>
 
       {/* Main Content Area */}
