@@ -1,25 +1,251 @@
-.map-container-wrapper {
-  height: 400px; /* Consistent height */
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  background-color: #f3f4f6;
+/* ── Shell ── */
+.trip-map-wrap {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.map-placeholder {
-  height: 400px;
+.trip-map-shell {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.trip-map-shell--loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 420px;
+  color: #888;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.trip-map-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid #e5e7eb;
+  border-top-color: #185FA5;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Toolbar ── */
+.trip-map-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.trip-map-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trip-map-title__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #E6F1FB;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9fafb;
-  color: #6b7280;
-  border: 1px dashed #d1d5db;
-  border-radius: 12px;
+  color: #185FA5;
+  flex-shrink: 0;
 }
 
-/* Ensure map markers pop nicely */
-.leaflet-popup-content-wrapper {
+.trip-map-title__heading {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: #111;
+  letter-spacing: -0.2px;
+}
+
+.trip-map-title__sub {
+  font-size: 12px;
+  color: #888;
+  margin: 2px 0 0;
+}
+
+.trip-map-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.trip-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
   border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.trip-map-btn:hover {
+  background: #f4f6f8;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* ── Map frame ── */
+.trip-map-frame {
+  height: 420px;
+  position: relative;
+}
+
+/* Remove default Leaflet outline */
+.trip-map-frame .leaflet-container {
+  outline: none;
+  font-family: inherit;
+}
+
+/* ── Custom pin ── */
+.trip-pin {
+  width: 32px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trip-pin::before {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--pin-color, #185FA5);
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.trip-pin::after {
+  content: '';
+  width: 6px;
+  height: 8px;
+  background: var(--pin-color, #185FA5);
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  margin-top: -1px;
+}
+
+.trip-pin__label {
+  position: absolute;
+  top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Popup ── */
+.trip-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+  padding: 0;
+  overflow: hidden;
+  border: none;
+}
+
+.trip-popup .leaflet-popup-content {
+  margin: 0;
+  min-width: 160px;
+}
+
+.trip-popup .leaflet-popup-tip {
+  box-shadow: none;
+}
+
+.trip-popup__day {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.trip-popup__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  padding: 8px 12px 4px;
+  margin: 0;
+}
+
+.trip-popup__cost {
+  font-size: 13px;
+  color: #3B6D11;
+  font-weight: 500;
+  padding: 0 12px 10px;
+  margin: 0;
+}
+
+/* ── Footer ── */
+.trip-map-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trip-map-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.trip-map-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+.trip-map-legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.trip-map-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.trip-map-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.trip-map-stat__val {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.3px;
+}
+
+.trip-map-stat__lbl {
+  font-size: 11px;
+  color: #999;
+  margin-top: 1px;
 }
