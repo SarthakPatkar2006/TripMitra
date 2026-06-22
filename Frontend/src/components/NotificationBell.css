@@ -1,94 +1,381 @@
-.notification-container {
-  position: relative;
+/* ===================================================================
+   NotificationBell — "Wanderlust" theme (matches TripDetails palette)
+   Palette: Sunset Coral #FF6B5B · Ocean Teal #0FA3A3 · Golden Sand #FFB627
+            Deep Navy #16213E · Berry #E84A89 · Cream #FFF8F0
+=================================================================== */
+
+:root {
+  --nb-coral: #ff6b5b;
+  --nb-coral-dark: #e8503f;
+  --nb-teal: #0fa3a3;
+  --nb-teal-dark: #0b7d7d;
+  --nb-sand: #ffb627;
+  --nb-berry: #e84a89;
+  --nb-slate: #6c63ff;
+  --nb-navy: #16213e;
+  --nb-cream: #fff8f0;
+  --nb-ink: #1f2230;
+  --nb-ink-soft: #6b7080;
+  --nb-line: #f0e6da;
 }
 
-.notification-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+.notification-container {
   position: relative;
+  font-family: "Poppins", "Segoe UI", system-ui, sans-serif;
+}
+
+/* ===================== BELL BUTTON ===================== */
+
+.notification-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #fff, #fff8f0);
+  box-shadow: 0 4px 14px rgba(22, 33, 62, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.notification-btn:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(255, 107, 91, 0.25);
+}
+
+.notification-btn.is-open {
+  background: linear-gradient(135deg, var(--nb-coral), var(--nb-berry));
+  box-shadow: 0 8px 20px rgba(232, 74, 137, 0.35);
+}
+
+.bell-icon {
+  font-size: 1.25rem;
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
+
+.notification-btn:hover .bell-icon {
+  animation: bell-ring 0.6s ease;
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(14deg); }
+  40% { transform: rotate(-12deg); }
+  60% { transform: rotate(8deg); }
+  80% { transform: rotate(-6deg); }
 }
 
 .notification-badge {
   position: absolute;
-  top: -8px;
-  right: -8px;
-
-  background: red;
-  color: white;
-
-  border-radius: 50%;
-
-  width: 20px;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
   height: 20px;
-
+  padding: 0 5px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--nb-sand), var(--nb-coral));
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 12px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(232, 74, 137, 0.4);
+  animation: badge-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+@keyframes badge-pop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ===================== DROPDOWN ===================== */
 
 .notification-dropdown {
   position: absolute;
+  top: calc(100% + 12px);
   right: 0;
-  top: 45px;
+  width: 380px;
+  max-height: 520px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(22, 33, 62, 0.22);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  animation: dropdown-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top right;
+}
 
-  width: 350px;
-
-  background: white;
-  border-radius: 12px;
-
-  box-shadow:
-    0 4px 20px
-      rgba(
-        0,
-        0,
-        0,
-        0.15
-      );
-
-  padding: 15px;
-  z-index: 100;
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .notification-header {
+  background: linear-gradient(120deg, var(--nb-coral) 0%, var(--nb-berry) 60%, var(--nb-teal) 130%);
+  padding: 18px 20px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notification-header h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.unread-pill {
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.mark-all-btn {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--nb-navy);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.mark-all-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+/* ===================== LIST ===================== */
+
+.notification-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 10px;
+  background: var(--nb-cream);
+}
+
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #e8d9c5;
+  border-radius: 999px;
+}
+
+.notification-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--nb-ink-soft);
+}
+
+.empty-emoji {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.notification-empty p {
+  margin: 0;
+  font-weight: 600;
 }
 
 .notification-item {
-  padding: 12px;
-  border-radius: 10px;
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  background: #fff;
+  border: 2px solid transparent;
+  border-left: 4px solid var(--rail-color, var(--nb-teal));
   cursor: pointer;
-  margin-bottom: 10px;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: item-fade-in 0.25s ease both;
 }
 
-.notification-item.unread {
-  background: #eff6ff;
+@keyframes item-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .notification-item:hover {
-  background: #f8fafc;
-}
-.notification-item.unread {
-  background: #eff6ff;
-  border-left: 4px solid #2563eb;
+  transform: translateX(2px);
+  box-shadow: 0 6px 16px rgba(22, 33, 62, 0.1);
 }
 
-.notification-item {
-  transition: all 0.2s ease;
+.notification-item.unread {
+  background: #fffaf3;
 }
-.notification-message {
+
+/* Accent rail colors per notification type */
+.notification-item.accent-teal { --rail-color: var(--nb-teal); }
+.notification-item.accent-sand { --rail-color: var(--nb-sand); }
+.notification-item.accent-coral { --rail-color: var(--nb-coral); }
+.notification-item.accent-berry { --rail-color: var(--nb-berry); }
+.notification-item.accent-slate { --rail-color: var(--nb-slate); }
+
+.notification-icon-chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--rail-color) 16%, #fff);
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
 }
 
-.notification-icon {
-  font-size: 18px;
+.notification-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+  line-height: 1.4;
+}
+
+.notification-item.unread .notification-message {
+  font-weight: 700;
+  color: var(--nb-navy);
+}
+
+.notification-delete {
+  background: transparent;
+  border: none;
+  color: var(--nb-ink-soft);
+  font-size: 0.78rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
   flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.notification-delete:hover {
+  background: var(--nb-coral);
+  color: #fff;
+}
+
+.notification-time {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.72rem;
+  color: var(--nb-ink-soft);
+  font-weight: 500;
+}
+
+.unread-dot {
+  position: absolute;
+  top: 14px;
+  right: 38px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rail-color, var(--nb-coral));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rail-color) 25%, transparent);
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 480px) {
+  .notification-dropdown {
+    position: fixed;
+    top: 64px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 75vh;
+  }
+
+  .notification-header {
+    padding: 16px 16px;
+  }
+
+  .notification-message {
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-title-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .notification-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bell-icon,
+  .notification-badge,
+  .notification-dropdown,
+  .notification-item {
+    animation: none !important;
+  }
+
+  .notification-btn:hover .bell-icon {
+    animation: none !important;
+  }
 }
