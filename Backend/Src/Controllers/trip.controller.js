@@ -9,7 +9,19 @@ import Notification from "../Models/Notification.js";
 const getUserId = (req) => req.user._id || req.user.id;
 
 const isTripOwner = (trip, userId) => trip.owner.toString() === userId.toString();
-
+const validTripTypes = [
+  "adventure",
+  "historical",
+  "nature",
+  "beach",
+  "religious",
+  "food",
+  "wildlife",
+  "romantic",
+  "family",
+  "luxury",
+  "solo"
+];
 const canAccessTrip = async (tripId, userId) => {
   const trip = await Trip.findById(tripId);
 
@@ -35,24 +47,43 @@ const canAccessTrip = async (tripId, userId) => {
 export const createTrip = async (req, res) => {
   try {
     const {
-      title,
-      origin,
-      destination,
-      startDate,
-      endDate,
-      budget,
-      travelStyle,
-      transportPreference,
-      accommodationType,
-      numberOfTravelers
-    } = req.body;
+  title,
+  origin,
+  destination,
+  startDate,
+  endDate,
+  budget,
+  tripType,
+  travelStyle,
+  transportPreference,
+  accommodationType,
+  numberOfTravelers
+} = req.body;
 
-    if (!origin || !destination || !startDate || !endDate || !budget) {
-      return res.status(400).json({
-        message:
-          "Origin, destination, dates, and budget are required"
-      });
-    }
+ if (
+  !origin ||
+  !destination ||
+  !startDate ||
+  !endDate ||
+  !budget ||
+  !tripType
+) {
+  return res.status(400).json({
+    message:
+      "Origin, destination, dates, budget and trip type are required"
+  });
+}
+if (Number(budget) <= 0) {
+  return res.status(400).json({
+    message: "Budget must be greater than 0"
+  });
+}
+if (!validTripTypes.includes(tripType)) {
+  return res.status(400).json({
+    message: "Invalid trip type"
+  });
+}
+
 
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -72,21 +103,22 @@ export const createTrip = async (req, res) => {
       });
     }
 
-    const newTrip = await Trip.create({
-      title:
-        title?.trim() ||
-        `${destination.trim()} Adventure`,
-      origin: origin.trim(),
-      destination: destination.trim(),
-      startDate: start,
-      endDate: end,
-      budget: Number(budget),
-      travelStyle: travelStyle || "balanced",
-      transportPreference,
-      accommodationType,
-      numberOfTravelers,
-      owner: req.user._id
-    });
+   const newTrip = await Trip.create({
+  title: title?.trim() || `${destination.trim()} Trip`,
+  origin: origin.trim(),
+  destination: destination.trim(),
+  startDate: start,
+  endDate: end,
+  budget: Number(budget),
+
+  tripType,
+
+  travelStyle: travelStyle || "balanced",
+  transportPreference,
+  accommodationType,
+  numberOfTravelers,
+  owner: req.user._id
+});
 
     await TripMember.create({
       tripId: newTrip._id,
@@ -205,6 +237,14 @@ export const updateTrip = async (req, res) => {
         updates[field] = req.body[field];
       }
     });
+    if (
+  updates.tripType &&
+  !validTripTypes.includes(updates.tripType)
+) {
+  return res.status(400).json({
+    message: "Invalid trip type"
+  });
+}
 const start = updates.startDate
   ? new Date(updates.startDate)
   : trip.startDate;

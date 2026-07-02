@@ -1,0 +1,289 @@
+/* ==========================================
+   OVERLAY
+========================================== */
+
+.invite-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: inviteOverlayFadeIn 0.2s ease;
+}
+
+@keyframes inviteOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================
+   MODAL SHELL
+========================================== */
+
+.invite-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+  animation: inviteModalPopIn 0.22s ease;
+}
+
+@keyframes inviteModalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.invite-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.invite-modal-close:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.invite-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.invite-modal-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.invite-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.invite-modal-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.invite-modal-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* ==========================================
+   BODY / FORM
+========================================== */
+
+.invite-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.invite-modal-body label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.invite-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 16px;
+  height: 52px;
+  color: #94a3b8;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.invite-input-wrapper:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.invite-input-wrapper.is-valid {
+  border-color: #10b981;
+}
+
+.invite-input-wrapper.is-valid:focus-within {
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.invite-input-wrapper.is-invalid {
+  border-color: #ef4444;
+}
+
+.invite-input-wrapper.is-invalid:focus-within {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.invite-input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.invite-input-wrapper input::placeholder {
+  color: #cbd5e1;
+}
+
+.invite-input-wrapper input:disabled {
+  cursor: not-allowed;
+}
+
+.invite-modal-body small {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.invite-valid-email {
+  color: #10b981;
+}
+
+.invite-invalid-email {
+  color: #ef4444;
+}
+
+/* ==========================================
+   MODAL ACTIONS
+========================================== */
+
+.invite-modal-actions {
+  margin-top: 32px;
+  padding-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.invite-cancel-btn,
+.invite-send-btn {
+  height: 52px;
+  min-width: 150px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.invite-cancel-btn {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #dbe4f0;
+}
+
+.invite-cancel-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.invite-send-btn {
+  color: white;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+}
+
+.invite-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.3);
+}
+
+.invite-send-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.invite-send-btn:disabled,
+.invite-cancel-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.invite-spin {
+  animation: inviteSpin 0.8s linear infinite;
+}
+
+@keyframes inviteSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 480px) {
+  .invite-modal {
+    padding: 28px 22px 22px;
+  }
+
+  .invite-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .invite-cancel-btn,
+  .invite-send-btn {
+    width: 100%;
+  }
+}

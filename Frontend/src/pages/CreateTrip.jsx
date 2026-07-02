@@ -10,6 +10,7 @@ export default function CreateTrip() {
     startDate: '',
     endDate: '',
     budget: '',
+    tripType: 'historical',
     travelStyle: 'balanced'
   });
 
@@ -22,7 +23,7 @@ export default function CreateTrip() {
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-    
+
     if (fieldErrors[id]) {
       setFieldErrors((prev) => ({ ...prev, [id]: null }));
     }
@@ -32,7 +33,7 @@ export default function CreateTrip() {
     const errors = {};
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const start = new Date(formData.startDate);
     const end = new Date(formData.endDate);
 
@@ -64,6 +65,10 @@ export default function CreateTrip() {
       errors.budget = "Please enter a valid positive budget amount";
     }
 
+    if (!formData.tripType) {
+      errors.tripType = "Select a trip type";
+    }
+
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -83,9 +88,10 @@ export default function CreateTrip() {
         startDate: formData.startDate,
         endDate: formData.endDate,
         budget: Number(formData.budget),
+        tripType: formData.tripType,
         travelStyle: formData.travelStyle
       });
-      
+
       navigate('/dashboard');
     } catch (err) {
       console.error("Trip Creation Error:", err);
@@ -183,10 +189,37 @@ export default function CreateTrip() {
               </div>
 
               <div className="input-group">
+                <label htmlFor="tripType">🧭 Trip Type</label>
+                <select
+                  id="tripType"
+                  value={formData.tripType}
+                  onChange={handleChange}
+                  className={fieldErrors.tripType ? "input-error" : ""}
+                >
+                  <option value="historical">Historical</option>
+                  <option value="adventure">Adventure</option>
+                  <option value="nature">Nature</option>
+                  <option value="beach">Beach</option>
+                  <option value="religious">Religious</option>
+                  <option value="food">Food</option>
+                  <option value="wildlife">Wildlife</option>
+                  <option value="romantic">Romantic</option>
+                  <option value="family">Family</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="solo">Solo</option>
+                </select>
+                {fieldErrors.tripType && (
+                  <span className="inline-error">{fieldErrors.tripType}</span>
+                )}
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="input-group">
                 <label htmlFor="travelStyle">⚡ Pace of Travel</label>
-                <select 
-                  id="travelStyle" 
-                  value={formData.travelStyle} 
+                <select
+                  id="travelStyle"
+                  value={formData.travelStyle}
                   onChange={handleChange}
                 >
                   <option value="relaxed">Relaxed (More downtime)</option>
@@ -194,6 +227,7 @@ export default function CreateTrip() {
                   <option value="packed">Packed (Maximize sights)</option>
                 </select>
               </div>
+              <div className="input-group input-group-spacer" />
             </div>
 
             <button type="submit" className="generate-btn" disabled={isLoading}>

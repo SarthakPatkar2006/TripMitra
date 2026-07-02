@@ -1,0 +1,242 @@
+/* =========================================================
+   ROOT
+========================================================= */
+
+.expense-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fadeIn .25s ease;
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.skeleton-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 20px;
+  background: #f1f5f9;
+}
+
+/* =========================================================
+   CHARTS
+========================================================= */
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.skeleton-chart {
+  height: 360px;
+  border-radius: 22px;
+  background: #f1f5f9;
+}
+
+/* =========================================================
+   LIST
+========================================================= */
+
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-expense {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  padding: 1.25rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* =========================================================
+   LEFT
+========================================================= */
+
+.expense-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.expense-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.expense-info {
+  flex: 1;
+}
+
+.line {
+  border-radius: 8px;
+  background: #e2e8f0;
+}
+
+.line.large {
+  width: 240px;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.line.medium {
+  width: 180px;
+  height: 14px;
+  margin-bottom: 10px;
+}
+
+.line.small {
+  width: 120px;
+  height: 12px;
+}
+
+/* =========================================================
+   RIGHT
+========================================================= */
+
+.expense-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.amount {
+  width: 120px;
+  height: 24px;
+  border-radius: 8px;
+  background: #e2e8f0;
+}
+
+.buttons {
+  display: flex;
+  gap: .75rem;
+}
+
+.btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #e2e8f0;
+}
+
+/* =========================================================
+   SHIMMER
+========================================================= */
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  transform: translateX(-100%);
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.65),
+    transparent
+  );
+
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+
+  100% {
+    transform: translateX(100%);
+  }
+
+}
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 992px) {
+
+  .skeleton-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .expense-skeleton {
+    gap: 1.5rem;
+  }
+
+  .skeleton-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .skeleton-expense {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expense-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .line.large {
+    width: 180px;
+  }
+
+  .line.medium {
+    width: 140px;
+  }
+
+  .line.small {
+    width: 100px;
+  }
+
+  .skeleton-chart {
+    height: 280px;
+  }
+
+}

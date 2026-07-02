@@ -1,67 +1,547 @@
-.trip-members {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ============ Page ============ */
+.trip-members-page {
+  background: #f8fafc;
+  min-height: 100vh;
+  padding: 32px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  color: #0f172a;
+  animation: pageFadeIn 0.3s ease;
 }
 
-.member-card,
-.invite-card {
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ Skeleton Loading ============ */
+.skeleton {
+  background: linear-gradient(90deg, #eef1f6 25%, #f6f8fb 37%, #eef1f6 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 16px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.skeleton-header {
+  height: 56px;
+  margin-bottom: 28px;
+  max-width: 420px;
+}
+
+.skeleton-stat {
+  height: 84px;
+}
+
+.skeleton-card {
+  height: 140px;
+}
+
+/* ============ Header ============ */
+.members-header {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-radius: 26px;
+  padding: 32px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 30px;
+  box-shadow: 0 18px 45px rgba(37, 99, 235, 0.22);
+}
+
+.members-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.members-header p {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 15px;
+  margin: 0;
+}
+
+.header-icon {
+  color: white;
+}
+
+/* ============ Buttons ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+/* ---------- Invite Button (replaces .btn-primary in header) ---------- */
+.invite-btn {
+  height: 52px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 14px;
   background: white;
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.invite-btn:hover {
+  transform: translateY(-3px);
+}
+
+.invite-btn:active {
+  transform: translateY(-1px);
+}
+
+/* ---------- Remove Button (replaces .btn-danger-outline) ---------- */
+.remove-btn {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 14.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+.btn-cancel-invite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-cancel-invite:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.btn-cancel-invite:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============ Statistics ============ */
+.members-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 22px;
   padding: 24px;
-  border-radius: 18px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.1);
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon-blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.stat-icon-amber {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 13.5px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+  color: #0f172a;
+}
+
+/* ============ Sections ============ */
+.members-section {
+  margin-bottom: 32px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.members-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0 14px;
+  color: #94a3b8;
+  min-width: 220px;
+}
+
+.members-search input {
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  color: #0f172a;
+  width: 100%;
+  background: transparent;
+}
+
+.members-search input::placeholder {
+  color: #94a3b8;
+}
+
+/* ============ Members Grid ============ */
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 .member-card {
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  transition: 0.3s;
+}
+
+.member-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
+}
+
+.member-card-top {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.member-avatar {
+  width: 58px;
+  height: 58px;
+  font-size: 18px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.member-card h4 {
-  margin-bottom: 6px;
+.member-avatar-owner {
+  background: #eff6ff;
+  color: #2563eb;
 }
 
-.member-card p {
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-name {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-email,
+.member-joined {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 3px 0;
+  font-size: 13px;
   color: #64748b;
 }
 
-.invite-card input {
-  width: 100%;
-  padding: 12px;
-  margin: 15px 0;
+.member-email span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.invite-card button,
-.member-card button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+.member-joined {
+  color: #94a3b8;
+  font-size: 12.5px;
 }
+
+.member-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.role-owner {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.role-member {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.member-actions {
+  margin-top: 16px;
+}
+
+/* ============ Pending Grid ============ */
+.pending-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
 .pending-card {
   background: white;
-  padding: 24px;
-  border-radius: 18px;
-  margin-top: 20px;
+  border-radius: 22px;
+  padding: 22px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  transition: 0.3s;
 }
 
-.pending-card h3 {
-  margin-bottom: 20px;
+.pending-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
 }
 
-.pending-item {
+.pending-card-top {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pending-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fffbeb;
+  color: #d97706;
+  display: flex;
   align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #e2e8f0;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.pending-item:last-child {
-  border-bottom: none;
+.pending-info {
+  min-width: 0;
 }
 
-.pending-item p {
-  margin-top: 6px;
-  color: #64748b;
+.pending-email {
+  margin: 0 0 4px 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pending-invited {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 12.5px;
+  color: #94a3b8;
+}
+
+.pending-card-footer {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffbeb;
+  color: #b45309;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+/* ============ Empty States ============ */
+.empty-state {
+  background: #fff;
+  border: 1.5px dashed #e2e8f0;
+  border-radius: 20px;
+  padding: 48px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.empty-icon {
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.empty-title {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.empty-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: #94a3b8;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 1100px) {
+  .members-grid,
+  .pending-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .members-grid,
+  .pending-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .members-search {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .trip-members-page {
+    padding: 18px;
+  }
+
+  .members-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .members-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .members-header .invite-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

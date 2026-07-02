@@ -3,12 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import "./TripDetails.css";
 import TripMap from "./TripMap";
-import ExpenseDashboard from "../components/ExpenseDashboard";
+
 import TripTabs from "../components/trip/TripTabs";
 import TripOverview from "../components/trip/TripOverview";
 import TripMembers from "../components/trip/TripMembers";
 import TripRecommendations from "../components/trip/TripRecommendations";
-import TripExpenses from "../components/trip/TripExpenses";
+import TripExpenses from "../components/trip/TripExpenses/TripExpenses";
 import TripNotes from "../components/trip/TripNotes";
 
 export default function TripDetails() {

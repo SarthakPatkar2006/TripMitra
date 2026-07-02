@@ -1,0 +1,277 @@
+/* ===========================
+   Invite Page
+=========================== */
+
+.invite-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.invite-card {
+  width: 100%;
+  max-width: 650px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.invite-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.invite-top {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+  text-align: center;
+  padding: 40px 30px;
+}
+
+.plane-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 18px;
+}
+
+.invite-top h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.invite-top p {
+  margin-top: 12px;
+  color: #dbeafe;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Trip Title
+=========================== */
+
+.trip-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #0f172a;
+  padding: 28px 20px 10px;
+}
+
+/* ===========================
+   Info Section
+=========================== */
+
+.invite-info {
+  padding: 10px 35px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  background: #f8fafc;
+  transition: 0.25s;
+}
+
+.info-row:hover {
+  background: #eef4ff;
+}
+
+.info-row svg {
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.info-row div {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.info-row strong {
+  font-size: 1rem;
+  color: #0f172a;
+  margin-top: 3px;
+}
+
+/* ===========================
+   Note
+=========================== */
+
+.invite-note {
+  margin: 10px 35px;
+  padding: 18px;
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  border-radius: 12px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+.invite-actions {
+  display: flex;
+  gap: 15px;
+  padding: 30px 35px 35px;
+}
+
+.accept-btn,
+.reject-btn,
+.home-btn {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: 0.25s;
+}
+
+.accept-btn {
+  background: #16a34a;
+  color: white;
+}
+
+.accept-btn:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+.reject-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.reject-btn:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.home-btn {
+  margin-top: 24px;
+  background: #2563eb;
+  color: white;
+  max-width: 220px;
+}
+
+.home-btn:hover {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   Loading / Error
+=========================== */
+
+.invite-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+  text-align: center;
+  padding: 30px;
+}
+
+.invite-loading h2 {
+  color: #0f172a;
+  margin: 0;
+}
+
+.invite-loading p {
+  color: #64748b;
+  max-width: 420px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 640px) {
+  .invite-card {
+    border-radius: 18px;
+  }
+
+  .invite-top {
+    padding: 30px 20px;
+  }
+
+  .invite-top h1 {
+    font-size: 1.6rem;
+  }
+
+  .trip-title {
+    font-size: 1.3rem;
+  }
+
+  .invite-info {
+    padding: 0 20px;
+  }
+
+  .invite-note {
+    margin: 20px;
+  }
+
+  .invite-actions {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .accept-btn,
+  .reject-btn {
+    width: 100%;
+  }
+}
+
+/* ===========================
+   Animation
+=========================== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

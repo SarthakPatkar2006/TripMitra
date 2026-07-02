@@ -83,8 +83,18 @@ const expenseSchema =
           mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-      }
+      },
+      receipt: {
+  type: String,
+  default: ""
+},
+
+isSettled: {
+  type: Boolean,
+  default: false
+}
     },
+    
     {
       timestamps: true
     }

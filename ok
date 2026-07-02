@@ -1,0 +1,114 @@
+[33mcommit a6cfa82122286b93ce1c10c675961dc2f1855f50[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Mon Jun 29 03:22:15 2026 +0530
+
+    Geoapify Response updated
+
+[33mcommit cd91a5ecaf918ff31b73e7e0fd7f2664c98b35bd[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Mon Jun 22 20:08:23 2026 +0530
+
+    Complete notification system with invitations, expenses and settlements
+
+[33mcommit 86a24d2ea0cc704ba69aacfb0b7d9642a2821e13[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Mon Jun 22 19:20:51 2026 +0530
+
+    Trip Dashboard upgrade
+
+[33mcommit a4bde3be19b5d71b5d0b5ca2fc5ebf631b9be5ac[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Sat Jun 20 03:50:21 2026 +0530
+
+    Complete Expense Module V1
+
+[33mcommit e764d85b8be347eb62da070b7828dd9e1910eafd[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Fri Jun 19 04:25:45 2026 +0530
+
+    Mail Invitation Setup Update From Google to Resender's Api
+
+[33mcommit c23407f3c1ffa33a9e8001ddf97c51ec33fff9ec[m
+Merge: 49cacdd 11db475
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Fri Jun 19 00:42:38 2026 +0530
+
+    Merge remote changes
+
+[33mcommit 49cacddd38baf3ee5ae52ce15a34fb0faa879101[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Fri Jun 19 00:37:34 2026 +0530
+
+    Add Invitation Feature
+
+[33mcommit 61c7917bf798d6bec4d01e79dd184de411294996[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Wed Jun 17 14:11:31 2026 +0530
+
+    Update Expense Dashboard
+
+[33mcommit b21ca025592d934c4b030f7cbac9c49d10276668[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Wed Jun 17 13:23:51 2026 +0530
+
+    Add Expense Tracker
+
+[33mcommit 11db47570111e2e9072c7f107cf8595d26d24300[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Tue Jun 16 16:02:10 2026 +0530
+
+    Update  README.md
+
+[33mcommit 334190091c442c6647602efd91db37f499298dd4[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Mon Jun 15 21:15:07 2026 +0530
+
+    feat: integrate leaflet maps, python budget enforcement, and nodemailer invite backbone
+
+[33mcommit 7e9313036f4ef7a2557c0bf52bb9f8555978a82b[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Sun Jun 14 00:08:56 2026 +0530
+
+    Add Microservice Integration
+
+[33mcommit 744d7572d534646f0f9e519df82278fc01ad0cb9[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Sat Jun 13 20:46:58 2026 +0530
+
+    feat: integrate Python optimization engine and complete backend routing pipeline
+
+[33mcommit a80245801e4b4e1243f7303d2e8a3e5bdb6b0c91[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Fri Jun 12 01:34:30 2026 +0530
+
+    feat: implement trip collaboration and invitation workflow
+
+[33mcommit 53eb7e2ef741255a53c332e616aec75aa137713f[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Fri Jun 12 00:10:28 2026 +0530
+
+    feat(group-trip): add trip member and invitation models
+
+[33mcommit 578083386ca50a6b95280e8fd121f82605f71209[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Thu Jun 11 01:21:22 2026 +0530
+
+    feat(trips): implement complete trip CRUD module
+
+[33mcommit 0e867314e1a250a168fed67520767fee7bcbf202[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Thu Jun 11 00:32:26 2026 +0530
+
+    feat(auth): implement JWT authentication system
+
+[33mcommit 5f0ef0027630e16ccaca8dd2863c27783770da25[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Thu Jun 4 00:06:27 2026 +0530
+
+    Add Database Schema
+
+[33mcommit fbdaec14f162a48dba1ee3da7bfd306127a5ea4e[m
+Author: SarthakPatkar2006 <patkarsarthak2006@gmail.com>
+Date:   Wed Jun 3 23:41:37 2026 +0530
+
+    Docs: Add Database, API and Architecture Documentation

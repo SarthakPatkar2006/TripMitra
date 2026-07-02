@@ -12,7 +12,9 @@ const notificationSchema = new mongoose.Schema({
     'trip_update',
     'itinerary_updated',
     'note_added',
-    'removed_from_trip'
+    'removed_from_trip',
+    'expense_updated',
+    'expense_deleted',
   ],
   required: true
 },

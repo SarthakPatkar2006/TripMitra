@@ -1,0 +1,307 @@
+.expense-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  transition: all 0.25s ease;
+}
+
+.expense-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* ==========================
+   LEFT
+========================== */
+
+.expense-card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ==========================
+   CATEGORY ICON
+========================== */
+
+.expense-category-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.expense-category-icon.food {
+  background: rgba(249,115,22,.12);
+  color: #f97316;
+}
+
+.expense-category-icon.hotel {
+  background: rgba(59,130,246,.12);
+  color: #2563eb;
+}
+
+.expense-category-icon.transport {
+  background: rgba(20,184,166,.12);
+  color: #14b8a6;
+}
+
+.expense-category-icon.activity {
+  background: rgba(168,85,247,.12);
+  color: #9333ea;
+}
+
+.expense-category-icon.shopping {
+  background: rgba(236,72,153,.12);
+  color: #ec4899;
+}
+
+.expense-category-icon.emergency {
+  background: rgba(239,68,68,.12);
+  color: #ef4444;
+}
+
+.expense-category-icon.misc {
+  background: rgba(148,163,184,.15);
+  color: #64748b;
+}
+
+/* ==========================
+   INFO
+========================== */
+
+.expense-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.expense-title-row {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  flex-wrap: wrap;
+}
+
+.expense-title-row h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.expense-description {
+  margin: .45rem 0 .8rem;
+  color: #64748b;
+  line-height: 1.6;
+  font-size: .92rem;
+}
+
+/* ==========================
+   BADGE
+========================== */
+
+.expense-category-badge {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: .74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+.expense-category-badge.food {
+  background: rgba(249,115,22,.12);
+  color: #f97316;
+}
+
+.expense-category-badge.hotel {
+  background: rgba(59,130,246,.12);
+  color: #2563eb;
+}
+
+.expense-category-badge.transport {
+  background: rgba(20,184,166,.12);
+  color: #14b8a6;
+}
+
+.expense-category-badge.activity {
+  background: rgba(168,85,247,.12);
+  color: #9333ea;
+}
+
+.expense-category-badge.shopping {
+  background: rgba(236,72,153,.12);
+  color: #ec4899;
+}
+
+.expense-category-badge.emergency {
+  background: rgba(239,68,68,.12);
+  color: #ef4444;
+}
+
+.expense-category-badge.misc {
+  background: rgba(148,163,184,.15);
+  color: #64748b;
+}
+
+/* ==========================
+   META
+========================== */
+
+.expense-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.expense-meta span {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  color: #64748b;
+  font-size: .88rem;
+}
+
+.expense-meta strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* ==========================
+   RIGHT
+========================== */
+
+.expense-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* ==========================
+   AMOUNT
+========================== */
+
+.expense-amount {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  color: #2563eb;
+}
+
+.expense-amount svg {
+  color: #2563eb;
+}
+
+.expense-amount h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+/* ==========================
+   ACTIONS
+========================== */
+
+.expense-actions {
+  display: flex;
+  gap: .65rem;
+}
+
+.expense-actions button {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.edit-btn {
+  color: #2563eb;
+}
+
+.edit-btn:hover {
+  background: rgba(37,99,235,.12);
+}
+
+.delete-btn {
+  color: #ef4444;
+}
+
+.delete-btn:hover {
+  background: rgba(239,68,68,.12);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 992px) {
+
+  .expense-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .expense-card-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .expense-card {
+    padding: 1rem;
+  }
+
+  .expense-card-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expense-meta {
+    flex-direction: column;
+    gap: .6rem;
+  }
+
+  .expense-card-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .expense-actions {
+    width: 100%;
+  }
+
+  .expense-actions button {
+    flex: 1;
+  }
+
+  .expense-amount h2 {
+    font-size: 1.25rem;
+  }
+
+}

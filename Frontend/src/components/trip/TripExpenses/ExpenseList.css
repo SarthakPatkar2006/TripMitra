@@ -1,0 +1,23 @@
+.expense-list{
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+}
+
+.expense-list-grid{
+    display:flex;
+    flex-direction:column;
+    gap:1.2rem;
+}
+
+@media(max-width:768px){
+
+.expense-list{
+    gap:1rem;
+}
+
+.expense-list-grid{
+    gap:1rem;
+}
+
+}

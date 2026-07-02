@@ -1,0 +1,395 @@
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.expense-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  z-index: 2000;
+  animation: fadeIn .25s ease;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.expense-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, .18);
+  animation: modalPop .25s ease;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.expense-modal-header {
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid #edf2f7;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.expense-modal-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.55rem;
+  font-weight: 700;
+}
+
+.expense-modal-header p {
+  margin-top: .4rem;
+  color: #64748b;
+  font-size: .92rem;
+  line-height: 1.6;
+}
+
+.modal-close-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.modal-close-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.expense-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+
+  font-size: .9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  padding: .9rem 1rem;
+  background: #fff;
+  font-size: .94rem;
+  transition: .25s;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37,99,235,.08);
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.expense-error {
+  padding: 1rem 1.2rem;
+  border-radius: 14px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+/* =========================================================
+   SPLIT BUTTONS
+========================================================= */
+
+.split-toggle {
+  display: flex;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 5px;
+  gap: .4rem;
+}
+
+.split-toggle button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  height: 46px;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #64748b;
+  transition: .25s;
+}
+
+.split-toggle button.active {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 8px 18px rgba(37,99,235,.22);
+}
+
+/* =========================================================
+   EQUAL SPLIT
+========================================================= */
+
+.split-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+  gap: 1rem;
+}
+
+.member-share {
+  padding: 1rem;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.member-share span {
+  color: #475569;
+  font-size: .92rem;
+}
+
+.member-share strong {
+  color: #16a34a;
+  font-size: 1rem;
+}
+
+/* =========================================================
+   CUSTOM SPLIT
+========================================================= */
+
+.split-custom-list {
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+}
+
+.split-custom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.split-custom-row span {
+  font-weight: 600;
+  color: #334155;
+}
+
+.split-custom-row input {
+  width: 130px;
+  text-align: right;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.expense-modal-footer {
+  margin-top: .5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #edf2f7;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-secondary,
+.btn-primary {
+  height: 50px;
+  padding: 0 1.5rem;
+  border-radius: 14px;
+  font-size: .94rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s;
+
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #dbe4f0;
+  color: #475569;
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+}
+
+.btn-primary {
+  border: none;
+  color: white;
+
+  background: linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+  );
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(37,99,235,.25);
+}
+
+.btn-primary:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.expense-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.expense-modal::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+@keyframes modalPop {
+
+  from {
+    transform: translateY(20px) scale(.98);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width:768px) {
+
+  .expense-modal-overlay {
+    padding: 1rem;
+    align-items: flex-end;
+  }
+
+  .expense-modal {
+    max-width: 100%;
+    max-height: 96vh;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .expense-modal-header,
+  .expense-form {
+    padding: 1.25rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .split-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .split-custom-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .split-custom-row input {
+    width: 100%;
+  }
+
+  .expense-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+}

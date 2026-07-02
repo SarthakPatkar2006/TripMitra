@@ -1,0 +1,181 @@
+.expense-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+/* ===========================
+   SEARCH
+=========================== */
+
+.expense-search {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 1rem;
+  height: 52px;
+  transition: all 0.25s ease;
+}
+
+.expense-search:hover,
+.expense-search:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+.expense-search svg {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.expense-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+.expense-search input::placeholder {
+  color: #94a3b8;
+}
+
+/* ===========================
+   ACTIONS
+=========================== */
+
+.expense-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ===========================
+   SELECTS
+=========================== */
+
+.toolbar-select {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 1rem;
+  height: 52px;
+  transition: all 0.25s ease;
+}
+
+.toolbar-select:hover,
+.toolbar-select:focus-within {
+  border-color: #2563eb;
+}
+
+.toolbar-select svg {
+  color: #64748b;
+}
+
+.toolbar-select select {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: #0f172a;
+  min-width: 150px;
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.expense-add-btn {
+  height: 52px;
+  padding: 0 1.4rem;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+  color: white;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expense-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.28);
+}
+
+.expense-add-btn:active {
+  transform: scale(0.98);
+}
+
+.expense-add-btn svg {
+  stroke-width: 2.5;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 992px) {
+  .expense-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .expense-search {
+    width: 100%;
+  }
+
+  .expense-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .toolbar-select {
+    flex: 1;
+  }
+
+  .toolbar-select select {
+    width: 100%;
+  }
+
+  .expense-add-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .expense-toolbar-actions {
+    flex-direction: column;
+  }
+
+  .toolbar-select,
+  .expense-add-btn {
+    width: 100%;
+  }
+
+  .toolbar-select select {
+    min-width: auto;
+  }
+}

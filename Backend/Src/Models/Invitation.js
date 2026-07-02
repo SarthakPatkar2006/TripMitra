@@ -48,6 +48,19 @@ const invitationSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+invitationSchema.index(
+  {
+    tripId: 1,
+    email: 1,
+    status: 1
+  },
+  {
+    unique: true,
+    partialFilterExpression: {
+      status: "pending"
+    }
+  }
+);
 export default mongoose.model(
   "Invitation",
   invitationSchema

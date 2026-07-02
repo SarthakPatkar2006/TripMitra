@@ -1,0 +1,335 @@
+/* =========================================================
+   ROOT
+========================================================= */
+
+.settlement-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.settlement-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.settlement-summary-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.4rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  transition: .25s;
+  box-shadow: 0 8px 24px rgba(15,23,42,.04);
+}
+
+.settlement-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(15,23,42,.08);
+}
+
+.settlement-summary-card svg {
+  width: 52px;
+  height: 52px;
+  padding: .9rem;
+  border-radius: 16px;
+
+  background: rgba(37,99,235,.10);
+  color: #2563eb;
+}
+
+.settlement-summary-card span {
+  display: block;
+  color: #64748b;
+  font-size: .85rem;
+}
+
+.settlement-summary-card strong {
+  display: block;
+  margin-top: .3rem;
+  font-size: 1.45rem;
+  color: #0f172a;
+}
+
+.settlement-summary-card.positive svg {
+  background: rgba(22,163,74,.12);
+  color: #16a34a;
+}
+
+.settlement-summary-card.negative svg {
+  background: rgba(239,68,68,.12);
+  color: #ef4444;
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.balance-section,
+.settlement-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 1.8rem;
+  box-shadow: 0 10px 30px rgba(15,23,42,.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.section-header button {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+
+  border: none;
+  border-radius: 12px;
+
+  padding: .75rem 1.2rem;
+
+  cursor: pointer;
+
+  background: #2563eb;
+  color: white;
+
+  transition: .25s;
+}
+
+.section-header button:hover {
+  background: #1d4ed8;
+}
+
+/* =========================================================
+   BALANCES
+========================================================= */
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px,1fr));
+  gap: 1.2rem;
+}
+
+.balance-card {
+  background: #f8fafc;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+
+  padding: 1.25rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: .25s;
+}
+
+.balance-card:hover {
+  background: #f1f5f9;
+}
+
+.balance-card h4 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.balance-card small {
+  display: block;
+  margin-top: .35rem;
+  color: #64748b;
+}
+
+.balance-card strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.balance-card .positive {
+  color: #16a34a;
+}
+
+.balance-card .negative {
+  color: #ef4444;
+}
+
+/* =========================================================
+   SETTLEMENT LIST
+========================================================= */
+
+.settlement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settlement-card {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+
+  align-items: center;
+  gap: 1rem;
+
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+
+  padding: 1.25rem;
+
+  transition: .25s;
+}
+
+.settlement-card:hover {
+  background: #f1f5f9;
+}
+
+.person h4 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.person small {
+  color: #64748b;
+}
+
+.settlement-card svg {
+  color: #2563eb;
+}
+
+.settlement-amount {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.settlement-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settlement-empty svg {
+  color: #16a34a;
+  margin-bottom: 1rem;
+}
+
+.settlement-empty h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+.settlement-empty p {
+  margin-top: .8rem;
+  color: #64748b;
+  max-width: 340px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.settlement-loading {
+  background: white;
+  border-radius: 24px;
+  padding: 5rem;
+
+  text-align: center;
+
+  color: #64748b;
+
+  font-size: 1rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+
+.settlement-summary{
+    grid-template-columns:1fr;
+}
+
+.balance-grid{
+    grid-template-columns:1fr;
+}
+
+.settlement-card{
+    grid-template-columns:1fr;
+    text-align:center;
+}
+
+.person{
+    text-align:center;
+}
+
+.settlement-card svg{
+    margin:auto;
+}
+
+.settlement-amount{
+    margin-top:.5rem;
+}
+
+}
+
+@media(max-width:768px){
+
+.balance-section,
+.settlement-section{
+    padding:1.25rem;
+}
+
+.section-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1rem;
+}
+
+.section-header button{
+    width:100%;
+    justify-content:center;
+}
+
+.settlement-summary-card{
+    padding:1.1rem;
+}
+
+.balance-card{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:1rem;
+}
+
+.balance-card strong{
+    font-size:1.3rem;
+}
+
+}

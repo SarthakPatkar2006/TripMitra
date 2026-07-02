@@ -19,8 +19,18 @@ const tripSchema = new mongoose.Schema(
     },
     tripType: {
       type: String,
-      enum: ["solo", "group"],
-      default: "solo"
+     enum: [
+    "adventure",
+    "historical",
+    "nature",
+    "beach",
+    "religious",
+    "food",
+    "wildlife",
+    "romantic",
+    "family",
+    "luxury"
+  ]
     },
     startDate: {
       type: Date,

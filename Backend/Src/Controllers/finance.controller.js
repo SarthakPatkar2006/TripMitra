@@ -1,618 +1,246 @@
+import mongoose from "mongoose";
 import Trip from "../Models/Trip.js";
 import Expense from "../Models/Expense.js";
 import TripMember from "../Models/TripMember.js";
-import mongoose from "mongoose";
-export const getFinanceSummary =
-  async (req, res) => {
-    try {
-      const { tripId } =
-        req.params;
+import { calculateSettlements } from "../Services/expense.service.js";
 
-      const trip =
-        await Trip.findById(
-          tripId
-        );
+const round = (num) => Math.round(num * 100) / 100;
 
-      if (!trip) {
-        return res
-          .status(404)
-          .json({
-            message:
-              "Trip not found"
-          });
-      }
+const capitalize = (str) =>
+  typeof str === "string" && str.length > 0
+    ? str.charAt(0).toUpperCase() + str.slice(1)
+    : str;
 
-      const expenses =
-        await Expense.find({
-          tripId
-        });
+const getBudgetStatus = (budgetUsage) => {
+  if (budgetUsage >= 100) return "over_budget";
+  if (budgetUsage >= 85) return "near_limit";
+  return "safe";
+};
 
-      const totalSpent =
-        expenses.reduce(
-          (
-            sum,
-            expense
-          ) =>
-            sum +
-            expense.amount,
-          0
-        );
+export const getFinanceSummary = async (req, res) => {
+  try {
+    const { tripId } = req.params;
 
-      const budget =
-        trip.budget || 0;
-
-      const remaining =
-        budget -
-        totalSpent;
-
-      const members =
-        await TripMember.countDocuments(
-          {
-            tripId,
-            status:
-              "accepted"
-          }
-        );
-
-      const totalPeople =
-        members + 1;
-
-      const costPerPerson =
-        totalPeople > 0
-          ? totalSpent /
-            totalPeople
-          : 0;
-
-      const usage =
-        budget > 0
-          ? (
-              (totalSpent /
-                budget) *
-              100
-            ).toFixed(1)
-          : 0;
-
-      res.status(200).json({
-        success: true,
-        summary: {
-          budget,
-          totalSpent,
-          remaining,
-          costPerPerson,
-          totalPeople,
-          budgetUsage:
-            Number(
-              usage
-            )
-        }
-      });
-    } catch (error) {
-      console.error(
-        error
-      );
-
-      res.status(500).json({
-        message:
-          "Internal Server Error"
-      });
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ success: false, message: "Invalid Trip" });
     }
-  };
-  export const getCategoryAnalytics =
-  async (req, res) => {
-    try {
-      const { tripId } =
-        req.params;
 
-      const categories =
-        await Expense.aggregate([
-          {
-            $match: {
-              tripId:
-                new mongoose.Types.ObjectId(
-                  tripId
-                )
-            }
-          },
-          {
-            $group: {
-              _id:
-                "$category",
-              amount: {
-                $sum:
-                  "$amount"
-              }
-            }
-          },
-          {
-            $sort: {
-              amount: -1
-            }
-          }
-        ]);
+    const [trip, totalSpentResult, totalPeople] = await Promise.all([
+      Trip.findById(tripId).lean(),
+      Expense.aggregate([
+        { $match: { tripId: new mongoose.Types.ObjectId(tripId) } },
+        { $group: { _id: null, totalSpent: { $sum: "$amount" } } }
+      ]),
+      // totalPeople is derived directly from TripMember. This assumes the
+      // trip owner is always inserted into TripMember like every other
+      // participant. If that invariant ever changes (owner not stored as
+      // a member), this count must be adjusted accordingly.
+      TripMember.countDocuments({ tripId, userId: { $ne: null } })
+    ]);
 
-      res.status(200).json({
-        success: true,
-        categories
-      });
-    } catch (error) {
-      console.error(
-        error
-      );
-
-      res.status(500).json({
-        message:
-          "Internal Server Error"
-      });
+    if (!trip) {
+      return res.status(404).json({ success: false, message: "Trip not found" });
     }
-  };
-  export const getTimeline =
-  async (req, res) => {
-    try {
-      const { tripId } =
-        req.params;
 
-      const timeline =
-        await Expense.aggregate([
-          {
-            $match: {
-              tripId:
-                new mongoose.Types.ObjectId(
-                  tripId
-                )
-            }
-          },
-          {
-            $group: {
-              _id:
-                "$expenseDate",
-              amount: {
-                $sum:
-                  "$amount"
-              }
-            }
-          },
-          {
-            $sort: {
-              _id: 1
-            }
-          }
-        ]);
+    const [{ totalSpent = 0 } = {}] = totalSpentResult;
 
-      res.status(200).json({
-        success: true,
-        timeline
-      });
-    } catch (error) {
-      console.error(
-        error
-      );
+    const budget = trip.budget || 0;
+    const remaining = round(budget - totalSpent);
 
-      res.status(500).json({
-        message:
-          "Internal Server Error"
-      });
+    const costPerPerson = totalPeople > 0 ? round(totalSpent / totalPeople) : 0;
+
+    const budgetUsage = budget > 0 ? round((totalSpent / budget) * 100) : 0;
+    const budgetStatus = getBudgetStatus(budgetUsage);
+
+    res.status(200).json({
+      success: true,
+      summary: {
+        budget,
+        totalSpent: round(totalSpent),
+        remaining,
+        totalPeople,
+        costPerPerson,
+        budgetUsage,
+        budgetStatus
+      }
+    });
+  } catch (error) {
+    console.error("Finance Summary Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getCategoryAnalytics = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ success: false, message: "Invalid Trip" });
     }
-  };
-  export const getBudgetPrediction =
-  async (req, res) => {
-    try {
-      const { tripId } =
-        req.params;
 
-      const trip =
-        await Trip.findById(
-          tripId
-        );
+    const categories = await Expense.aggregate([
+      { $match: { tripId: new mongoose.Types.ObjectId(tripId) } },
+      {
+        $group: {
+          _id: "$category",
+          amount: { $sum: "$amount" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { amount: -1 } }
+    ]);
 
-      if (!trip) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message:
-              "Trip not found"
-          });
-      }
+    const formatted = categories.map((entry) => ({
+      name: capitalize(entry._id),
+      value: entry._id,
+      amount: round(entry.amount),
+      count: entry.count
+    }));
 
-      const expenseResult =
-        await Expense.aggregate([
-          {
-            $match: {
-              tripId:
-                new mongoose.Types.ObjectId(
-                  tripId
-                )
-            }
+    res.status(200).json({
+      success: true,
+      categories: formatted
+    });
+  } catch (error) {
+    console.error("Category Analytics Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getTimeline = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ success: false, message: "Invalid Trip" });
+    }
+
+    // Group by calendar day (not full timestamp) so multiple expenses
+    // on the same day roll up into a single point on the timeline.
+    const timeline = await Expense.aggregate([
+      { $match: { tripId: new mongoose.Types.ObjectId(tripId) } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$expenseDate" }
           },
-          {
-            $group: {
-              _id: null,
-              totalSpent:
-                {
-                  $sum:
-                    "$amount"
-                }
-            }
-          }
-        ]);
-
-      const spent =
-        expenseResult[0]
-          ?.totalSpent || 0;
-
-      const budget =
-        trip.budget || 0;
-
-      const remaining =
-        Math.max(
-          budget - spent,
-          0
-        );
-
-      const startDate =
-        new Date(
-          trip.startDate
-        );
-
-      const endDate =
-        new Date(
-          trip.endDate
-        );
-
-      const today =
-        new Date();
-
-      const totalDays =
-        Math.max(
-          1,
-          Math.ceil(
-            (endDate -
-              startDate) /
-              (1000 *
-                60 *
-                60 *
-                24)
-          ) + 1
-        );
-
-      let daysElapsed =
-        Math.ceil(
-          (today -
-            startDate) /
-            (1000 *
-              60 *
-              60 *
-              24)
-        ) + 1;
-
-      daysElapsed =
-        Math.max(
-          1,
-          Math.min(
-            daysElapsed,
-            totalDays
-          )
-        );
-
-      const daysRemaining =
-        Math.max(
-          totalDays -
-            daysElapsed,
-          0
-        );
-
-      const averagePerDay =
-        daysElapsed
-          ? Math.round(
-              spent /
-                daysElapsed
-            )
-          : 0;
-
-      const predictedTotal =
-        Math.round(
-          averagePerDay *
-            totalDays
-        );
-
-      const recommendedPerDay =
-        daysRemaining
-          ? Math.round(
-              remaining /
-                daysRemaining
-            )
-          : 0;
-
-      const budgetUsage =
-        budget
-          ? Math.round(
-              (spent /
-                budget) *
-                100
-            )
-          : 0;
-
-      let status =
-        "on_budget";
-
-      if (
-        predictedTotal >
-        budget
-      ) {
-        status =
-          "over_budget";
-      } else if (
-        budgetUsage >=
-        85
-      ) {
-        status =
-          "near_limit";
-      }
-
-      const excess =
-        Math.max(
-          predictedTotal -
-            budget,
-          0
-        );
-
-      res.status(200).json({
-        success: true,
-        prediction: {
-          budget,
-          spent,
-          remaining,
-          totalDays,
-          daysElapsed,
-          daysRemaining,
-          averagePerDay,
-          predictedTotal,
-          recommendedPerDay,
-          budgetUsage,
-          excess,
-          status
+          amount: { $sum: "$amount" }
         }
-      });
-    } catch (error) {
-      console.error(
-        "Prediction error:",
-        error
-      );
+      },
+      { $sort: { _id: 1 } }
+    ]);
 
-      res.status(500).json({
-        success: false,
-        message:
-          "Internal Server Error"
-      });
+    const formatted = timeline.map((entry) => ({
+      date: entry._id,
+      amount: round(entry.amount)
+    }));
+
+    res.status(200).json({
+      success: true,
+      timeline: formatted
+    });
+  } catch (error) {
+    console.error("Timeline Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getBudgetPrediction = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ success: false, message: "Invalid Trip" });
     }
-  };
-  export const getSettlements =
-  async (req, res) => {
-    try {
-      const { tripId } =
-        req.params;
 
-      const members =
-        await TripMember.find({
-          tripId
-        }).populate(
-          "userId",
-          "name email"
-        );
+    const [trip, expenseResult] = await Promise.all([
+      Trip.findById(tripId).lean(),
+      Expense.aggregate([
+        { $match: { tripId: new mongoose.Types.ObjectId(tripId) } },
+        { $group: { _id: null, totalSpent: { $sum: "$amount" } } }
+      ])
+    ]);
 
-      if (
-        members.length ===
-        0
-      ) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message:
-              "No members found"
-          });
-      }
-
-      const expenses =
-        await Expense.find({
-          tripId
-        }).populate(
-          "paidBy",
-          "name"
-        );
-
-      const totalExpenses =
-        expenses.reduce(
-          (
-            sum,
-            expense
-          ) =>
-            sum +
-            expense.amount,
-          0
-        );
-
-      const perPerson =
-        totalExpenses /
-        members.length;
-
-      const paidMap =
-        new Map();
-
-      members.forEach(
-        (member) => {
-          paidMap.set(
-            member.userId._id.toString(),
-            {
-              userId:
-                member
-                  .userId
-                  ._id,
-              name:
-                member
-                  .userId
-                  .name,
-              paid: 0
-            }
-          );
-        }
-      );
-
-      expenses.forEach(
-        (expense) => {
-          const userId =
-            expense.paidBy._id.toString();
-
-          const person =
-            paidMap.get(
-              userId
-            );
-
-          if (
-            person
-          ) {
-            person.paid +=
-              expense.amount;
-          }
-        }
-      );
-
-      const balances =
-        [];
-
-      paidMap.forEach(
-        (
-          person
-        ) => {
-          balances.push({
-            ...person,
-            shouldPay:
-              Math.round(
-                perPerson
-              ),
-            balance:
-              Math.round(
-                person.paid -
-                  perPerson
-              )
-          });
-        }
-      );
-
-      const creditors =
-        balances
-          .filter(
-            (m) =>
-              m.balance >
-              0
-          )
-          .sort(
-            (
-              a,
-              b
-            ) =>
-              b.balance -
-              a.balance
-          );
-
-      const debtors =
-        balances
-          .filter(
-            (m) =>
-              m.balance <
-              0
-          )
-          .sort(
-            (
-              a,
-              b
-            ) =>
-              a.balance -
-              b.balance
-          );
-
-      const transactions =
-        [];
-
-      let i = 0;
-      let j = 0;
-
-      while (
-        i <
-          debtors.length &&
-        j <
-          creditors.length
-      ) {
-        const debtor =
-          debtors[i];
-
-        const creditor =
-          creditors[j];
-
-        const amount =
-          Math.min(
-            -debtor.balance,
-            creditor.balance
-          );
-
-        transactions.push(
-          {
-            from:
-              debtor.name,
-            fromId:
-              debtor.userId,
-            to:
-              creditor.name,
-            toId:
-              creditor.userId,
-            amount:
-              Math.round(
-                amount
-              )
-          }
-        );
-
-        debtor.balance +=
-          amount;
-
-        creditor.balance -=
-          amount;
-
-        if (
-          debtor.balance ===
-          0
-        ) {
-          i++;
-        }
-
-        if (
-          creditor.balance ===
-          0
-        ) {
-          j++;
-        }
-      }
-
-      res.status(200).json({
-        success: true,
-        totalExpenses,
-        perPerson:
-          Math.round(
-            perPerson
-          ),
-        balances,
-        transactions
-      });
-    } catch (error) {
-      console.error(
-        "Settlement Error:",
-        error
-      );
-
-      res.status(500).json({
-        success: false,
-        message:
-          "Internal Server Error"
-      });
+    if (!trip) {
+      return res.status(404).json({ success: false, message: "Trip not found" });
     }
-  };
+
+    const [{ totalSpent: spent = 0 } = {}] = expenseResult;
+    const budget = trip.budget || 0;
+    const remaining = Math.max(budget - spent, 0);
+
+    const startDate = new Date(trip.startDate);
+    const endDate = new Date(trip.endDate);
+    const today = new Date();
+
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+    const totalDays = Math.max(1, Math.ceil((endDate - startDate) / MS_PER_DAY) + 1);
+
+    let daysElapsed = Math.ceil((today - startDate) / MS_PER_DAY) + 1;
+    daysElapsed = Math.max(1, Math.min(daysElapsed, totalDays));
+
+    const daysRemaining = Math.max(totalDays - daysElapsed, 0);
+
+    const averagePerDay = daysElapsed ? Math.round(spent / daysElapsed) : 0;
+    const predictedTotal = Math.round(averagePerDay * totalDays);
+    const recommendedPerDay = daysRemaining ? Math.round(remaining / daysRemaining) : 0;
+    const budgetUsage = budget ? Math.round((spent / budget) * 100) : 0;
+
+    // Unified with getFinanceSummary's naming: safe / near_limit / over_budget.
+    let status = "safe";
+    if (predictedTotal > budget) {
+      status = "over_budget";
+    } else if (budgetUsage >= 85) {
+      status = "near_limit";
+    }
+
+    const excess = Math.max(predictedTotal - budget, 0);
+
+    res.status(200).json({
+      success: true,
+      prediction: {
+        budget,
+        spent: round(spent),
+        remaining: round(remaining),
+        daysElapsed,
+        daysRemaining,
+        averagePerDay,
+        recommendedPerDay,
+        predictedTotal,
+        budgetUsage,
+        status,
+        excess
+      }
+    });
+  } catch (error) {
+    console.error("Prediction Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getSettlements = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(tripId)) {
+      return res.status(400).json({ success: false, message: "Invalid Trip" });
+    }
+
+    const settlementData = await calculateSettlements(tripId);
+
+    const message =
+      settlementData.settlements.length === 0
+        ? "No settlements required."
+        : undefined;
+
+    res.status(200).json({
+      success: true,
+      ...(message ? { message } : {}),
+      ...settlementData
+    });
+  } catch (error) {
+    console.error("Settlement Error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};

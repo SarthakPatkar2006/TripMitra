@@ -252,7 +252,7 @@ export async function inviteMember(req, res) {
   </div>
 </div>
 `;
-
+console.log("Inviting email:", normalizedEmail);
 await sendEmail({
   email: normalizedEmail,
   subject: `✈️ ${req.user.name} invited you to join a trip to ${trip.destination}`,
@@ -318,7 +318,7 @@ export async function rejectInvitation(req, res) {
       return res.status(403).json({ message: "This invitation belongs to another email address" });
     }
 
-    invitation.status = "declined";
+    invitation.status = "rejected";
     await invitation.save();
 
     await Notification.create({

@@ -1,0 +1,78 @@
+/* ======================================
+   Remove Member Modal
+====================================== */
+
+.remove-modal {
+  width: 100%;
+  max-width: 520px;
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0,0,0,.18);
+  animation: scaleIn .25s ease;
+}
+
+.danger-icon {
+  width: 72px;
+  height: 72px;
+  margin: auto;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #dc2626;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.remove-member-info {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 16px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.remove-member-info h3 {
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.remove-member-info p {
+  color: #64748b;
+}
+
+.warning-box {
+  margin-top: 24px;
+  background: #fff7ed;
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px;
+  padding: 16px;
+  color: #7c2d12;
+  line-height: 1.6;
+}
+
+.danger-btn {
+  border: none;
+  background: #dc2626;
+  color: white;
+  padding: 13px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: .25s;
+  font-weight: 600;
+}
+
+.danger-btn:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+.danger-btn:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+}

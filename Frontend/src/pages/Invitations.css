@@ -1,40 +1,130 @@
-.invitations-page {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 24px;
+.invite-container{
+    padding:40px;
+    max-width:1300px;
+    margin:auto;
 }
 
-.invitation-grid {
-  display: grid;
-  gap: 20px;
+.invite-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
 }
 
-.invitation-card {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px
-    rgba(0, 0, 0, 0.08);
+.invite-header h1{
+    font-size:34px;
+    margin-bottom:8px;
 }
 
-.invitation-card p {
-  margin: 12px 0;
+.invite-header p{
+    color:#6b7280;
 }
 
-.invitation-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
+.invite-count{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#2563eb;
+    color:white;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:600;
 }
 
-.invitation-actions button {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.invite-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:24px;
 }
 
-.empty-state {
-  padding: 80px;
-  text-align: center;
+.invite-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.invite-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+.invite-card h2{
+    margin-bottom:20px;
+}
+
+.info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#475569;
+    margin-bottom:14px;
+}
+
+.buttons{
+    display:flex;
+    gap:12px;
+    margin-top:25px;
+}
+
+.accept-btn,
+.reject-btn{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    border:none;
+    padding:12px;
+    border-radius:12px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.accept-btn{
+    background:#22c55e;
+    color:white;
+}
+
+.accept-btn:hover{
+    background:#16a34a;
+}
+
+.reject-btn{
+    background:#ef4444;
+    color:white;
+}
+
+.reject-btn:hover{
+    background:#dc2626;
+}
+
+.empty-card{
+    margin-top:70px;
+    text-align:center;
+    padding:80px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.empty-card svg{
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+.empty-card h2{
+    margin-bottom:10px;
+}
+
+.empty-card p{
+    color:#6b7280;
+}
+
+.invite-loading{
+    padding:100px;
+    text-align:center;
+    font-size:22px;
 }

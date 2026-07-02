@@ -1,0 +1,794 @@
+/* =========================================================
+   ROOT
+========================================================= */
+
+.trip-expenses {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fadeIn .35s ease;
+}
+
+/* =========================================================
+   HERO HEADER
+========================================================= */
+
+.expense-page-header {
+  position: relative;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
+
+  color: white;
+
+  border-radius: 28px;
+
+  padding: 2.5rem;
+
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 2rem;
+
+  box-shadow:
+      0 25px 55px
+      rgba(37,99,235,.25);
+}
+
+.expense-page-header::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:420px;
+    height:420px;
+
+    right:-150px;
+    top:-180px;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.08);
+
+}
+
+.expense-page-header::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    left:-80px;
+    bottom:-120px;
+
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.06);
+
+}
+
+.expense-page-header>*{
+
+    position:relative;
+    z-index:2;
+
+}
+
+.expense-page-header h1{
+
+    margin:0;
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    letter-spacing:-.4px;
+
+}
+
+.expense-page-header p{
+
+    margin-top:.75rem;
+
+    max-width:520px;
+
+    line-height:1.8;
+
+    color:
+    rgba(255,255,255,.88);
+
+    font-size:.96rem;
+
+}
+
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
+
+.primary-btn{
+
+    height:54px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:white;
+
+    color:#2563eb;
+
+    padding:0 1.7rem;
+
+    cursor:pointer;
+
+    font-size:.95rem;
+
+    font-weight:700;
+
+    transition:.3s;
+
+    white-space:nowrap;
+
+}
+
+.primary-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 18px 35px
+    rgba(0,0,0,.15);
+
+}
+
+/* =========================================================
+   QUICK STATS
+========================================================= */
+
+.hero-stats{
+
+    margin-top:2rem;
+
+    display:flex;
+
+    gap:1rem;
+
+    flex-wrap:wrap;
+
+}
+
+.hero-stat{
+
+    backdrop-filter:blur(12px);
+
+    background:
+    rgba(255,255,255,.12);
+
+    border:
+    1px solid
+    rgba(255,255,255,.15);
+
+    border-radius:16px;
+
+    padding:1rem 1.25rem;
+
+    min-width:170px;
+
+}
+
+.hero-stat span{
+
+    display:block;
+
+    color:
+    rgba(255,255,255,.75);
+
+    font-size:.82rem;
+
+}
+
+.hero-stat strong{
+
+    display:block;
+
+    margin-top:.45rem;
+
+    font-size:1.35rem;
+
+    font-weight:700;
+
+    color:white;
+
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.expense-tabs{
+
+    background:white;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:18px;
+
+    padding:.4rem;
+
+    display:flex;
+
+    gap:.5rem;
+
+    box-shadow:
+    0 10px 25px
+    rgba(15,23,42,.05);
+
+}
+
+.tab{
+
+    flex:1;
+
+    height:52px;
+
+    border:none;
+
+    background:transparent;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    color:#64748b;
+
+    font-size:.95rem;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.tab:hover{
+
+    background:#f8fafc;
+
+}
+
+.tab.active{
+
+    background:
+    linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8);
+
+    color:white;
+
+    box-shadow:
+    0 12px 24px
+    rgba(37,99,235,.22);
+
+}
+
+/* =========================================================
+   DASHBOARD GRID
+========================================================= */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:1.5rem;
+
+}
+
+/* =========================================================
+   SECTION SPACING
+========================================================= */
+
+.trip-expenses section{
+
+    animation:
+    fadeUp .35s ease;
+
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(15px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+}
+
+to{
+
+opacity:1;
+
+}
+
+}
+/* =========================================================
+   CONTENT SPACING
+========================================================= */
+
+.trip-expenses > * {
+  width: 100%;
+}
+
+.trip-expenses section {
+  scroll-margin-top: 90px;
+}
+
+/* =========================================================
+   FLOATING ACTION BUTTON (MOBILE)
+========================================================= */
+
+.fab-add-expense {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+
+  width: 62px;
+  height: 62px;
+
+  border: none;
+  border-radius: 50%;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+  box-shadow:
+    0 18px 40px
+    rgba(37,99,235,.35);
+
+  transition: .3s;
+
+  z-index: 100;
+}
+
+.fab-add-expense:hover {
+
+  transform:
+    translateY(-4px)
+    scale(1.05);
+
+}
+
+.fab-add-expense:active{
+
+    transform:scale(.96);
+
+}
+
+/* =========================================================
+   HEADER STATUS BADGE
+========================================================= */
+
+.hero-status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:.6rem;
+
+    margin-top:1rem;
+
+    padding:.55rem 1rem;
+
+    border-radius:999px;
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+    background:
+    rgba(255,255,255,.14);
+
+    border:
+    1px solid
+    rgba(255,255,255,.18);
+
+    backdrop-filter:blur(12px);
+
+}
+
+.hero-status.safe{
+
+    color:#dcfce7;
+
+}
+
+.hero-status.warning{
+
+    color:#fde68a;
+
+}
+
+.hero-status.danger{
+
+    color:#fecaca;
+
+}
+
+/* =========================================================
+   DASHBOARD SECTION WRAPPER
+========================================================= */
+
+.dashboard-section{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1.5rem;
+
+}
+
+.dashboard-section:not(:last-child){
+
+    margin-bottom:.5rem;
+
+}
+
+/* =========================================================
+   CARD WRAPPER
+========================================================= */
+
+.dashboard-card{
+
+    background:#ffffff;
+
+    border-radius:24px;
+
+    border:1px solid #e2e8f0;
+
+    padding:1.5rem;
+
+    box-shadow:
+    0 12px 28px
+    rgba(15,23,42,.05);
+
+}
+
+.dashboard-card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:1.5rem;
+
+}
+
+.dashboard-card-header h2,
+.dashboard-card-header h3{
+
+    margin:0;
+
+    color:#0f172a;
+
+}
+
+.dashboard-card-header p{
+
+    margin-top:.4rem;
+
+    color:#64748b;
+
+}
+
+/* =========================================================
+   PAGE TRANSITIONS
+========================================================= */
+
+.dashboard-grid>*{
+
+    animation:
+    cardAppear .4s ease;
+
+}
+
+@keyframes cardAppear{
+
+from{
+
+opacity:0;
+
+transform:
+translateY(12px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width:1100px){
+
+.dashboard-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+.hero-stats{
+
+    gap:.8rem;
+
+}
+
+.hero-stat{
+
+    flex:1;
+
+    min-width:150px;
+
+}
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:768px){
+
+.trip-expenses{
+
+    gap:1.4rem;
+
+}
+
+/* ---------- HEADER ---------- */
+
+.expense-page-header{
+
+    padding:1.5rem;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+}
+
+.expense-page-header h1{
+
+    font-size:1.6rem;
+
+}
+
+.expense-page-header p{
+
+    font-size:.9rem;
+
+    max-width:100%;
+
+}
+
+.primary-btn{
+
+    display:none;
+
+}
+
+.fab-add-expense{
+
+    display:flex;
+
+}
+
+/* ---------- HERO ---------- */
+
+.hero-stats{
+
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+.hero-stat{
+
+    min-width:auto;
+
+}
+
+/* ---------- TABS ---------- */
+
+.expense-tabs{
+
+    overflow-x:auto;
+
+    white-space:nowrap;
+
+    padding:.45rem;
+
+    scrollbar-width:none;
+
+}
+
+.expense-tabs::-webkit-scrollbar{
+
+    display:none;
+
+}
+
+.tab{
+
+    flex:none;
+
+    min-width:150px;
+
+}
+
+/* ---------- CARDS ---------- */
+
+.dashboard-card{
+
+    padding:1.2rem;
+
+}
+
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width:540px){
+
+.hero-stats{
+
+    grid-template-columns:1fr;
+
+}
+
+.expense-page-header{
+
+    border-radius:22px;
+
+}
+
+.tab{
+
+    min-width:130px;
+
+    font-size:.88rem;
+
+}
+
+.dashboard-card{
+
+    border-radius:20px;
+
+}
+
+}
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width:1400px){
+
+.trip-expenses{
+
+    gap:2.25rem;
+
+}
+
+.dashboard-grid{
+
+    gap:2rem;
+
+}
+
+.hero-stat{
+
+    min-width:200px;
+
+}
+
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print{
+
+.fab-add-expense,
+.primary-btn{
+
+display:none;
+
+}
+
+.expense-tabs{
+
+display:none;
+
+}
+
+.trip-expenses{
+
+gap:1rem;
+
+}
+
+.dashboard-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
