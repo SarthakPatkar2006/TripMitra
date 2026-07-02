@@ -6,7 +6,8 @@ import {
   getCategoryAnalytics,
   getTimeline,
   getBudgetPrediction,
-  getSettlements
+  getSettlements,
+    getMyWallet
 } from "../Controllers/finance.controller.js";
 
 const router = Router();
@@ -42,5 +43,9 @@ router.get(
   protect,
   getSettlements
 );
-
+router.get(
+"/trips/:tripId/wallet",
+protect,
+getMyWallet
+);
 export default router;

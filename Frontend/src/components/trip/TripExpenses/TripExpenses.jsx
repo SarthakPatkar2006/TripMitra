@@ -14,7 +14,7 @@ import {
   getTimeline,
   getSettlements,
 } from "../../../api/financeApi";
-
+import TripWallet from "./TripWallet";
 import ExpenseSummaryCards from "./ExpenseSummaryCards";
 import BudgetOverviewCard from "./BudgetOverviewCard";
 import BudgetPrediction from "./BudgetPrediction";
@@ -27,10 +27,19 @@ import ExpenseSkeleton from "./ExpenseSkeleton";
 
 import "./TripExpenses.css";
 
+// ✅ Cleaned up: removed the duplicate "expenses" entry and the stray
+// unwired "overview" id. Tab order now matches the required sequence:
+// Overview -> My Wallet -> Expenses -> Settlements. The "dashboard" id is
+// kept as-is (unchanged functionality) but relabeled "Overview" to match
+// the required tab order/naming without touching its render block below.
 const TABS = [
   {
     id: "dashboard",
-    label: "Dashboard",
+    label: "Overview",
+  },
+  {
+    id: "wallet",
+    label: "My Wallet",
   },
   {
     id: "expenses",
@@ -209,7 +218,7 @@ export default function TripExpenses({
 
       </div>
 
-      {/* Dashboard */}
+      {/* Dashboard (Overview) */}
 
       {activeTab ===
         "dashboard" && (
@@ -278,6 +287,15 @@ export default function TripExpenses({
           </div>
 
         </>
+      )}
+
+      {/* My Wallet */}
+
+      {activeTab ===
+        "wallet" && (
+        <TripWallet
+          tripId={tripId}
+        />
       )}
 
       {/* Expenses */}

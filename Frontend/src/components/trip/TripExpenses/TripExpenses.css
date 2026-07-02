@@ -216,6 +216,9 @@
 
 /* =========================================================
    TABS
+   ✅ Updated: flex-wrap added so an extra tab (My Wallet) reflows
+   onto a new row instead of squeezing existing tabs or overflowing.
+   Gap increased to 12px per spec. Colors/radius/shadow unchanged.
 ========================================================= */
 
 .expense-tabs{
@@ -230,7 +233,9 @@
 
     display:flex;
 
-    gap:.5rem;
+    flex-wrap:wrap;
+
+    gap:12px;
 
     box-shadow:
     0 10px 25px
@@ -238,9 +243,14 @@
 
 }
 
+/* ✅ Updated: flex-basis added so tabs wrap gracefully at narrower
+   widths instead of compressing to unreadable widths. flex-grow:1
+   preserved so tabs still fill the row evenly on desktop, same as
+   before, when there's no wrapping needed. */
+
 .tab{
 
-    flex:1;
+    flex:1 1 140px;
 
     height:52px;
 
@@ -282,6 +292,21 @@
     0 12px 24px
     rgba(37,99,235,.22);
 
+}
+
+/* =========================================================
+   ✅ NEW: TAB CONTENT PANEL
+   Wrap each tab's rendered content in <div className="te-panel">
+   in TripExpenses.jsx to pick up this spacing + fade/slide-in
+   animation on every tab switch, including My Wallet. Does not
+   affect Overview/Expenses/Analytics/Settlements internals — this
+   only controls the outer spacing/animation of whichever content
+   sits inside it.
+========================================================= */
+
+.te-panel {
+    margin-top: 24px;
+    animation: fadeIn 0.25s ease;
 }
 
 /* =========================================================
@@ -341,11 +366,15 @@ from{
 
 opacity:0;
 
+transform: translateY(8px);
+
 }
 
 to{
 
 opacity:1;
+
+transform: translateY(0);
 
 }
 
@@ -596,6 +625,9 @@ transform:none;
 
 /* =========================================================
    MOBILE
+   ✅ Updated: tabs now wrap onto multiple rows first; horizontal
+   scroll only kicks in if a row still can't fit (e.g. very narrow
+   screens), via the existing overflow-x/scrollbar-hiding rules.
 ========================================================= */
 
 @media (max-width:768px){
@@ -666,6 +698,8 @@ transform:none;
 
 .expense-tabs{
 
+    flex-wrap:wrap;
+
     overflow-x:auto;
 
     white-space:nowrap;
@@ -684,9 +718,9 @@ transform:none;
 
 .tab{
 
-    flex:none;
+    flex:1 1 130px;
 
-    min-width:150px;
+    min-width:130px;
 
 }
 

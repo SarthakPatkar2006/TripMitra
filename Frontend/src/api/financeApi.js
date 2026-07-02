@@ -14,3 +14,5 @@ export const getBudgetPrediction = (tripId) =>
 
 export const getSettlements = (tripId) =>
   api.get(`/trips/${tripId}/settlements`);
+export const getWallet = (tripId) =>
+  api.get(`/trips/${tripId}/wallet`);

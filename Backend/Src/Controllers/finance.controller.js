@@ -244,3 +244,92 @@ export const getSettlements = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const getMyWallet = async (req, res) => {
+    try {
+
+        const { tripId } = req.params;
+        const userId = req.user.id;
+
+        const { settlements } =
+            await calculateSettlements(tripId);
+
+        const receivable = [];
+        const payable = [];
+
+        let totalReceivable = 0;
+        let totalPayable = 0;
+
+        settlements.forEach((item) => {
+
+            if (
+                item.to.toString() === userId
+            ) {
+
+                receivable.push({
+                    user: {
+                        _id: item.from,
+                        name: item.fromName
+                    },
+                    amount: item.amount
+                });
+
+                totalReceivable += item.amount;
+
+            }
+
+            if (
+                item.from.toString() === userId
+            ) {
+
+                payable.push({
+                    user: {
+                        _id: item.to,
+                        name: item.toName
+                    },
+                    amount: item.amount
+                });
+
+                totalPayable += item.amount;
+
+            }
+
+        });
+
+        return res.json({
+
+            success: true,
+
+            wallet: {
+
+    receivable,
+
+    payable,
+
+    totalReceivable: round(totalReceivable),
+
+    totalPayable: round(totalPayable),
+
+    netBalance: round(
+        totalReceivable -
+        totalPayable
+    )
+
+}
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+
+            success:false,
+
+            message:"Internal Server Error"
+
+        });
+
+    }
+};
